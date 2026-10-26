@@ -6,7 +6,6 @@ import { Button, ButtonLink } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Eyebrow } from '@/components/ui/eyebrow'
-import { IconButton } from '@/components/ui/icon-button'
 import { Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useComparisonResult } from '@/hooks/use-comparison-result'
@@ -50,18 +49,7 @@ export function ResultView() {
 
   return (
     <Screen>
-      <ScreenHeader
-        title="Resultado"
-        backHref="/comparar"
-        action={
-          <IconButton
-            icon="info"
-            label="Aprender"
-            href={`/aprender/${lesson.slug}`}
-            className="justify-self-end"
-          />
-        }
-      />
+      <ScreenHeader title="Resultado" backHref="/comparar" />
 
       <section className="pt-6">
         {isExampleComparison(draft) && (
