@@ -54,7 +54,8 @@ src/
 | `/comparar`                  | `src/app/(app)/comparar/page.tsx`                       | `features/comparison/components/comparison-form.tsx`  |
 | `/comparar/a`, `/comparar/b` | `src/app/(app)/comparar/[alt]/page.tsx`                 | `features/comparison/components/alt-details-form.tsx` |
 | `/resultado`                 | `src/app/(app)/resultado/page.tsx`                      | `features/comparison/components/result-view.tsx`      |
-| `/aprender`                  | `src/app/(app)/aprender/page.tsx`                       | `features/learn/components/lesson-screen.tsx`         |
+| `/aprender`                  | `src/app/(app)/aprender/page.tsx`                       | `features/learn/components/lessons-index-screen.tsx`  |
+| `/aprender/[slug]`           | `src/app/(app)/aprender/[slug]/page.tsx`                | `features/learn/components/lesson-screen.tsx`         |
 | `/historial`                 | `src/app/(app)/historial/page.tsx`                      | `features/history/components/history-screen.tsx`      |
 | `/perfil`                    | `src/app/(app)/perfil/page.tsx`                         | `features/profile/components/profile-screen.tsx`      |
 
@@ -66,21 +67,23 @@ Grupos de rutas:
 
 ### ¿Dónde está…?
 
-| Necesito…                                | Archivo                                                                                       |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Cálculo de costo / ganador / diferencia  | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
-| Datos de ejemplo, borrador inicial       | `src/features/comparison/lib/factories.ts`                                                    |
-| Reglas de validación y mensajes de error | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
-| Qué se guarda en `localStorage`          | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
-| Estado global y acciones                 | `src/store/app-store.ts` (`useAppStore`)                                                      |
-| Valores derivados del estado             | `src/store/selectors.ts`                                                                      |
-| Errores por campo para formularios       | `src/hooks/use-alt-validation.ts`                                                             |
-| Confirmar antes de salir con cambios     | `src/hooks/use-guarded-navigation.ts`                                                         |
-| Textos de los diálogos de confirmación   | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
-| Opciones del onboarding                  | `src/features/onboarding/constants.ts`                                                        |
-| Colores, radios, fuentes, animaciones    | `@theme` en `src/app/globals.css`                                                             |
-| Íconos SVG                               | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
-| Formato de soles y fechas                | `src/lib/format.ts`                                                                           |
+| Necesito…                                    | Archivo                                                                                       |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Cálculo de costo / ganador / diferencia      | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
+| Datos de ejemplo, borrador inicial           | `src/features/comparison/lib/factories.ts`                                                    |
+| Reglas de validación y mensajes de error     | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
+| Qué se guarda en `localStorage`              | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
+| Estado global y acciones                     | `src/store/app-store.ts` (`useAppStore`)                                                      |
+| Valores derivados del estado                 | `src/store/selectors.ts`                                                                      |
+| Errores por campo para formularios           | `src/hooks/use-alt-validation.ts`                                                             |
+| Confirmar antes de salir con cambios         | `src/hooks/use-guarded-navigation.ts`                                                         |
+| Textos de los diálogos de confirmación       | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
+| Contenido de las lecciones, lección sugerida | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                  |
+| Volver atrás con ruta de respaldo            | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                      |
+| Opciones del onboarding                      | `src/features/onboarding/constants.ts`                                                        |
+| Colores, radios, fuentes, animaciones        | `@theme` en `src/app/globals.css`                                                             |
+| Íconos SVG                                   | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
+| Formato de soles y fechas                    | `src/lib/format.ts`                                                                           |
 
 ## Estado (Zustand)
 
@@ -129,4 +132,21 @@ Grupos de rutas:
 5. Tests en `calculate-cost.test.ts` y `comparison.schema.test.ts`.
 6. Si cambia la forma persistida de forma incompatible, sube la clave `STORAGE_KEY` o agrega `version`/`migrate` en el `persist` del store.
 
+**Agregar una lección**
+
+1. Agrega un objeto a `LESSONS` en `src/features/learn/lessons.ts` (slug en kebab-case, `number` correlativo).
+2. El ejemplo usa `Alt` reales: declara `winner` y escribe la conclusión con `{diff}` (se reemplaza por la diferencia calculada; no escribas el monto a mano).
+3. `pnpm test`: `lessons.test.ts` falla si el ganador declarado no coincide con el cálculo.
+4. La ruta `/aprender/<slug>`, la tarjeta del inicio y el índice se generan solos. Si aplica, ajusta `suggestLesson`.
+
 **Agregar un diálogo de confirmación**: añade una entrada a `CONFIRM_PRESETS` y usa `<ConfirmDialog preset="…" open onCancel onConfirm />` con estado local `open`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

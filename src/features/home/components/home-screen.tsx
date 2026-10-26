@@ -9,11 +9,11 @@ import { Icon } from '@/components/ui/icon'
 import { Mark } from '@/components/ui/mark'
 import { Screen } from '@/components/layout/screen'
 import { LastComparisonCard } from '@/features/history/components/last-comparison-card'
+import { LessonsCarousel } from '@/features/learn/components/lessons-carousel'
 import { useOpenSaved } from '@/hooks/use-open-saved'
 import { money } from '@/lib/format'
 import { useAppStore } from '@/store/app-store'
 import { selectTotalSavings } from '@/store/selectors'
-import { Tip } from './tip'
 
 export function HomeScreen() {
   const router = useRouter()
@@ -61,6 +61,8 @@ export function HomeScreen() {
         </Button>
       </section>
 
+      <LessonsCarousel />
+
       {last ? (
         <section className="pt-7">
           <div className="flex items-center justify-between">
@@ -78,8 +80,6 @@ export function HomeScreen() {
           description="Aún no guardaste comparaciones. Crea una y revisa el costo real."
         />
       )}
-
-      <Tip number="01">Suma el transporte antes de dejarte llevar por un descuento.</Tip>
     </Screen>
   )
 }

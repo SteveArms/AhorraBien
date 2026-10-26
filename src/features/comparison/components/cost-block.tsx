@@ -2,9 +2,15 @@ import { Icon } from '@/components/ui/icon'
 import { cn } from '@/lib/cn'
 import { money } from '@/lib/format'
 
-type CostBlockProps = { label: string; cost: number; winner?: boolean }
+type CostBlockProps = {
+  label: string
+  cost: number
+  winner?: boolean
+  /** Línea opcional bajo la etiqueta, p. ej. "20 % de descuento". */
+  note?: string
+}
 
-export function CostBlock({ label, cost, winner }: CostBlockProps) {
+export function CostBlock({ label, cost, winner, note }: CostBlockProps) {
   return (
     <div
       className={cn(
@@ -13,6 +19,7 @@ export function CostBlock({ label, cost, winner }: CostBlockProps) {
       )}
     >
       <span className="text-[11px] text-muted">{label}</span>
+      {note && <span className="text-[11px] leading-tight font-bold text-accent">{note}</span>}
       <strong className="text-[clamp(24px,7vw,31px)] tracking-[-.06em] whitespace-nowrap">
         {money(cost)}
       </strong>

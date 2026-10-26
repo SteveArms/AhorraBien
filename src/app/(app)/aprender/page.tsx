@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { LessonScreen } from '@/features/learn/components/lesson-screen'
+import { LessonsIndexScreen } from '@/features/learn/components/lessons-index-screen'
 
 export const metadata: Metadata = { title: 'Aprendizaje' }
 
 export default function Page() {
-  return <LessonScreen />
+  return <LessonsIndexScreen />
 }

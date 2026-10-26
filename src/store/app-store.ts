@@ -20,6 +20,8 @@ type AppActions = {
   toggleDifficulty: (difficulty: string) => void
   startNew: () => void
   loadExample: () => void
+  /** Carga una comparación ya armada (p. ej. el ejemplo de una lección) como borrador limpio. */
+  loadDraft: (comparison: Comparison) => void
   openSaved: (id: string) => void
   setProduct: (product: string) => void
   setAltField: (key: AltKey, field: AltField, value: number) => void
@@ -55,6 +57,7 @@ export const useAppStore = create<AppStore>()(
 
       startNew: () => set({ draft: initialComparison(), dirty: false }),
       loadExample: () => set({ draft: exampleComparison(), dirty: false }),
+      loadDraft: (comparison) => set({ draft: comparison, dirty: false }),
       openSaved: (id) => {
         const item = get().saved.find((c) => c.id === id)
         if (item) set({ draft: item, dirty: false })

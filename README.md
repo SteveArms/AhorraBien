@@ -52,24 +52,25 @@ Al comprar, solemos comparar solo el precio de la etiqueta o el porcentaje de de
 2. Calcula el **costo real** de cada una y te dice **cuál conviene y por cuánto**.
 3. Muestra un **desglose transparente** para que entiendas de dónde sale el número.
 4. Guarda tus comparaciones en un **historial** y suma tu **ahorro potencial acumulado**.
-5. Incluye **micro-lecciones** de educación financiera para comprar mejor.
+5. Incluye **lecciones de un minuto** con ejemplos resueltos en soles, a la vista desde el inicio, para comprar con más criterio.
 
 Todo funciona en tu dispositivo: no hay cuentas, servidores ni datos bancarios.
 
 ## Funcionalidades
 
-| Funcionalidad         | Descripción                                                                              |
-| --------------------- | ---------------------------------------------------------------------------------------- |
-| Onboarding            | Eliges tu objetivo y lo que más te cuesta al comprar; se guarda en tu perfil.            |
-| Demo guiada           | Un ejemplo ilustrativo precargado para entender la app en segundos.                      |
-| Comparación A vs B    | Nombre del producto y precio de cada alternativa, con validación en tiempo real.         |
-| Detalles opcionales   | Descuento inmediato, beneficio de pago, transporte, otros gastos y cashback referencial. |
-| Resultado             | Alternativa ganadora, diferencia en soles, recomendación y desglose de cada costo.       |
-| Historial             | Comparaciones guardadas con fecha, resultado y diferencia; se pueden abrir o eliminar.   |
-| Inicio                | Última comparación y ahorro potencial acumulado.                                         |
-| Aprendizaje           | Micro-lección: “¿Un descuento del 20 % siempre es mejor?”.                               |
-| Perfil                | Objetivo elegido, moneda, cómo se calculan los costos e información de privacidad.       |
-| Protección de cambios | Si sales del formulario con cambios sin guardar, se te pide confirmar.                   |
+| Funcionalidad         | Descripción                                                                                                                                                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Onboarding            | Eliges tu objetivo y lo que más te cuesta al comprar; se guarda en tu perfil.                                                                                                                                          |
+| Demo guiada           | Un ejemplo ilustrativo precargado para entender la app en segundos.                                                                                                                                                    |
+| Comparación A vs B    | Nombre del producto y precio de cada alternativa, con validación en tiempo real.                                                                                                                                       |
+| Detalles opcionales   | Descuento inmediato, beneficio de pago, transporte, otros gastos y cashback referencial.                                                                                                                               |
+| Resultado             | Alternativa ganadora, diferencia en soles, recomendación y desglose de cada costo.                                                                                                                                     |
+| Historial             | Comparaciones guardadas con fecha, resultado y diferencia; se pueden abrir o eliminar.                                                                                                                                 |
+| Inicio                | Carrusel de lecciones, última comparación y ahorro potencial acumulado.                                                                                                                                                |
+| Aprendizaje           | 4 lecciones (descuentos, transporte, cashback y gastos extra). Cada una muestra lo que parece, lo que realmente pasa, un ejemplo resuelto, la idea clave y cómo aplicarla; el ejemplo se puede abrir en el comparador. |
+| Lección sugerida      | El resultado recomienda la lección más útil según los datos de la comparación (p. ej. cashback).                                                                                                                       |
+| Perfil                | Objetivo elegido, moneda, cómo se calculan los costos e información de privacidad.                                                                                                                                     |
+| Protección de cambios | Si sales del formulario con cambios sin guardar, se te pide confirmar.                                                                                                                                                 |
 
 ## Cómo se calcula el costo real
 
@@ -202,7 +203,7 @@ ahorrabien/
 │   │   ├── comparison/      Formulario, detalles, resultado y cálculo de costos
 │   │   ├── history/         Historial y tarjeta de última comparación
 │   │   ├── home/            Pantalla de inicio
-│   │   ├── learn/           Micro-lecciones
+│   │   ├── learn/           Lecciones (contenido en lessons.ts) y sus pantallas
 │   │   ├── onboarding/      Bienvenida, objetivo, dificultades y demo
 │   │   └── profile/         Perfil y preferencias
 │   ├── hooks/               Hooks compartidos
@@ -216,19 +217,20 @@ ahorrabien/
 
 ## Rutas de la aplicación
 
-| Ruta                          | Pantalla                                         |
-| ----------------------------- | ------------------------------------------------ |
-| `/`                           | Bienvenida                                       |
-| `/onboarding/objetivo`        | Paso 1: objetivo al comprar                      |
-| `/onboarding/dificultades`    | Paso 2: qué dificulta elegir                     |
-| `/demo`                       | Paso 3: ejemplo ilustrativo                      |
-| `/inicio`                     | Inicio con actividad reciente                    |
-| `/comparar`                   | Nueva comparación (producto y precios)           |
-| `/comparar/a` · `/comparar/b` | Detalles opcionales de cada alternativa          |
-| `/resultado`                  | Resultado y desglose                             |
-| `/aprender`                   | Micro-lección                                    |
-| `/historial`                  | Comparaciones guardadas                          |
-| `/perfil`                     | Preferencias, privacidad y borrado del historial |
+| Ruta                          | Pantalla                                            |
+| ----------------------------- | --------------------------------------------------- |
+| `/`                           | Bienvenida                                          |
+| `/onboarding/objetivo`        | Paso 1: objetivo al comprar                         |
+| `/onboarding/dificultades`    | Paso 2: qué dificulta elegir                        |
+| `/demo`                       | Paso 3: ejemplo ilustrativo                         |
+| `/inicio`                     | Inicio con actividad reciente                       |
+| `/comparar`                   | Nueva comparación (producto y precios)              |
+| `/comparar/a` · `/comparar/b` | Detalles opcionales de cada alternativa             |
+| `/resultado`                  | Resultado y desglose                                |
+| `/aprender`                   | Índice de lecciones                                 |
+| `/aprender/[slug]`            | Lección (p. ej. `/aprender/cashback-llega-despues`) |
+| `/historial`                  | Comparaciones guardadas                             |
+| `/perfil`                     | Preferencias, privacidad y borrado del historial    |
 
 ## Arquitectura
 
@@ -259,6 +261,7 @@ Las pruebas cubren:
 
 - **Cálculo de costos** (`calculate-cost.test.ts`): fórmula, redondeo, cashback, empates y casos inválidos.
 - **Validación** (`comparison.schema.test.ts`): mensajes de error por campo y reglas del producto y las alternativas.
+- **Lecciones** (`lessons.test.ts`): el ganador que afirma cada lección coincide con el cálculo real.
 - **Store** (`app-store.test.ts`): guardar, abrir y eliminar comparaciones, persistencia y rehidratación con datos corruptos.
 
 ## Privacidad

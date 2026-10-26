@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Newsreader } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { AppFrame } from '@/components/layout/app-frame'
+import { NavigationTracker } from '@/components/layout/navigation-tracker'
 import { StoreHydrator } from '@/components/layout/store-hydrator'
 import { Toast } from '@/components/ui/toast'
 import './globals.css'
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="es" className={`${dmSans.variable} ${newsreader.variable}`}>
       <body>
         <StoreHydrator />
+        <NavigationTracker />
         <AppFrame>
           {children}
           <Toast />

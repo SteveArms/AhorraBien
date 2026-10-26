@@ -13,6 +13,8 @@ import { useComparisonResult } from '@/hooks/use-comparison-result'
 import { money } from '@/lib/format'
 import { useAppStore } from '@/store/app-store'
 import { selectIsDraftSaved } from '@/store/selectors'
+import { LessonCard } from '@/features/learn/components/lesson-card'
+import { suggestLesson } from '@/features/learn/lessons'
 import { isExampleComparison } from '../lib/factories'
 import { Breakdown } from './breakdown'
 import { CostBlock } from './cost-block'
@@ -44,6 +46,7 @@ export function ResultView() {
   }
 
   const { aCost, bCost, winner, difference } = outcome
+  const lesson = suggestLesson(draft)
 
   return (
     <Screen>
@@ -51,7 +54,12 @@ export function ResultView() {
         title="Resultado"
         backHref="/comparar"
         action={
-          <IconButton icon="info" label="Aprender" href="/aprender" className="justify-self-end" />
+          <IconButton
+            icon="info"
+            label="Aprender"
+            href={`/aprender/${lesson.slug}`}
+            className="justify-self-end"
+          />
         }
       />
 
@@ -83,8 +91,12 @@ export function ResultView() {
           <span className="font-bold">Cómo llegamos al resultado</span>
           <small className="text-[10px] text-muted">Desglose transparente</small>
         </div>
-        <Breakdown side="A" alt={draft.a} cost={aCost} />
-        <Breakdown side="B" alt={draft.b} cost={bCost} />
+        <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} />
+        <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} />
+      </section>
+
+      <section className="pt-7">
+        <LessonCard lesson={lesson} variant="featured" />
       </section>
 
       <div className="grid gap-2.5 pt-[25px]">
