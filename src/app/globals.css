@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+/* Pantallas bajas (≤720px de alto): se usa como `short:` en las clases. */
+@custom-variant short (@media (max-height: 720px));
+
+@theme {
+  /* Colores de marca. Úsalos como bg-forest, text-accent, border-line, etc. */
+  --color-cream: #f7f3e8;
+  --color-forest: #244d3b;
+  --color-ink: #242720;
+  --color-accent: #e58a52;
+  --color-sage: #dce5d8;
+  --color-paper: #fffefa;
+  --color-muted: #77796f;
+  --color-line: #e5e0d4;
+  --color-danger: #b83d35;
+  --color-danger-soft: #f6e5df;
+  --color-backdrop: #d9d7cf;
+
+  /* Radios: rounded-ctl (botones, inputs), rounded-card, rounded-sheet (modales). */
+  --radius-ctl: 12px;
+  --radius-card: 18px;
+  --radius-sheet: 28px;
+
+  /* Las variables --font-dm-sans y --font-newsreader las define next/font en src/app/layout.tsx. */
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-serif: var(--font-newsreader), serif;
+
+  --animate-enter: enter 0.28s ease both;
+  --animate-winner: winner 0.55s ease both;
+  --animate-fade: fade 0.2s;
+  --animate-sheet: sheet 0.25s ease;
+  --animate-toast: toast 0.25s ease;
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(7px);
+    }
+  }
+  @keyframes winner {
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes sheet {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+  }
+  @keyframes toast {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+  }
+}
+
+@layer base {
+  body {
+    background: var(--color-backdrop);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  button {
+    color: inherit;
+    cursor: pointer;
+  }
+  button:focus-visible,
+  input:focus-visible,
+  summary:focus-visible,
+  a:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+    outline-offset: 2px;
+  }
+  h1 {
+    font-size: clamp(36px, 10vw, 47px);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    font-weight: 600;
+  }
+  h1 em {
+    font-family: var(--font-serif);
+    color: var(--color-forest);
+    font-weight: 500;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
