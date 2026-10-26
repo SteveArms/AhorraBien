@@ -1,37 +1,130 @@
-# figma-make-app
+# AhorraBien
 
-React + Vite + Tailwind CSS project running inside Figma Make.
+App web móvil (marco de 430px) que compara el **costo real** de dos alternativas de compra en soles (S/). Todo es local: no hay backend; preferencias e historial viven en `localStorage`.
 
-## Development Server
+**Fórmula de costo** (`src/features/comparison/lib/calculate-cost.ts`):
+`costo = precio − descuento − beneficio de pago + transporte + otros gastos` (redondeado a 2 decimales, mínimo 0). El **cashback** es referencial: se muestra aparte y **no** reduce el costo. Si la alternativa no pasa `altSchema`, el costo es `null`.
 
-A Vite development server is **already running** on `$PORT` (default 8443). You don't need to start it manually.
+## Stack
 
-- Preview URL: The user can access the running app through the preview panel
-- Hot reload: Changes to source files are reflected immediately
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript 6 (strict) · Tailwind CSS v4 · Zustand 5 (`persist`) · Zod 4 · Vitest + Testing Library · ESLint 9 (`eslint-config-next`) · Prettier (+ plugin de Tailwind) · pnpm 11 · Node 22 (ver `.mise.toml`).
 
-## Project Structure
+> TypeScript está fijado en 6.x y ESLint en 9.x porque `typescript-eslint` y los plugins de `eslint-config-next` aún no soportan TS 7 / ESLint 10.
 
-This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
+## Comandos
 
-- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
-- `src/App.tsx` - Primary application component and the usual starting point for UI work
-- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
-- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
-- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
-- `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and Figma Make plugins plus the `@` alias for `src`
-- `.mise.toml` - Toolchain versions for Node.js and pnpm
+| Comando                             | Qué hace                                       |
+| ----------------------------------- | ---------------------------------------------- |
+| `pnpm dev`                          | Servidor de desarrollo (http://localhost:3000) |
+| `pnpm build` / `pnpm start`         | Build de producción / servirlo                 |
+| `pnpm typecheck`                    | `tsc --noEmit`                                 |
+| `pnpm lint`                         | ESLint                                         |
+| `pnpm test` / `pnpm test:watch`     | Vitest (`src/**/*.test.ts(x)`, entorno jsdom)  |
+| `pnpm format` / `pnpm format:check` | Prettier                                       |
 
-## Dependencies
+Antes de terminar un cambio: `pnpm typecheck && pnpm lint && pnpm test && pnpm build`.
 
-- Runtime: React 19 and React DOM 19
-- Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
-- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
-- Formatting: oxfmt
+## Mapa del proyecto
 
-## Styling
+```
+src/
+  app/            Rutas (App Router). Las page.tsx son delgadas: solo metadata + componente de features/.
+  components/
+    ui/           Piezas genéricas sin lógica de negocio (Button, NumberField, ConfirmDialog…)
+    layout/       Estructura de pantalla (Screen, ScreenHeader, BottomNav, AppFrame, hidratación)
+  features/<f>/   Pantallas y piezas de cada dominio; lógica pura en features/<f>/lib/
+  hooks/          Hooks compartidos (validación, navegación protegida, hidratación…)
+  schemas/        Esquemas Zod: la fuente de verdad de los datos y sus mensajes de error
+  store/          Store global de Zustand y selectores
+  lib/            Utilidades puras (cn, formato de moneda/fecha)
+  types/          Tipos inferidos de los esquemas (z.infer). No declares tipos de datos a mano.
+```
 
-This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
+### Rutas → archivos
 
-`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
+| URL                          | Página                                                  | Componente principal                                  |
+| ---------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| `/`                          | `src/app/page.tsx`                                      | `features/onboarding/components/welcome-screen.tsx`   |
+| `/onboarding/objetivo`       | `src/app/(onboarding)/onboarding/objetivo/page.tsx`     | `features/onboarding/components/goal-step.tsx`        |
+| `/onboarding/dificultades`   | `src/app/(onboarding)/onboarding/dificultades/page.tsx` | `features/onboarding/components/difficulty-step.tsx`  |
+| `/demo`                      | `src/app/(onboarding)/demo/page.tsx`                    | `features/onboarding/components/demo-screen.tsx`      |
+| `/inicio`                    | `src/app/(app)/inicio/page.tsx`                         | `features/home/components/home-screen.tsx`            |
+| `/comparar`                  | `src/app/(app)/comparar/page.tsx`                       | `features/comparison/components/comparison-form.tsx`  |
+| `/comparar/a`, `/comparar/b` | `src/app/(app)/comparar/[alt]/page.tsx`                 | `features/comparison/components/alt-details-form.tsx` |
+| `/resultado`                 | `src/app/(app)/resultado/page.tsx`                      | `features/comparison/components/result-view.tsx`      |
+| `/aprender`                  | `src/app/(app)/aprender/page.tsx`                       | `features/learn/components/lesson-screen.tsx`         |
+| `/historial`                 | `src/app/(app)/historial/page.tsx`                      | `features/history/components/history-screen.tsx`      |
+| `/perfil`                    | `src/app/(app)/perfil/page.tsx`                         | `features/profile/components/profile-screen.tsx`      |
 
-Tailwind emits utility classes in `@layer utilities`, and CSS outside any cascade layer overrides every layer regardless of specificity. Put global element styles, such as resets and defaults for `body`, headings, `button`, or `input`, inside `@layer base { ... }` so utility classes on those elements still apply. Tailwind's Preflight already applies `box-sizing: border-box`, removes default margins, and sets `font: inherit` on form controls, so do not repeat those rules.
+Grupos de rutas:
+
+- `(onboarding)/layout.tsx` y `(app)/layout.tsx` envuelven en `HydrationGate` (no renderizan hasta leer `localStorage`).
+- `(app)/layout.tsx` además monta `BottomNavSlot`, que muestra la barra inferior solo en `BOTTOM_NAV_PATHS` (`components/layout/bottom-nav.tsx`).
+- `src/app/layout.tsx`: fuentes (`next/font`), metadata, `StoreHydrator`, `AppFrame` y `Toast`.
+
+### ¿Dónde está…?
+
+| Necesito…                                | Archivo                                                                                       |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Cálculo de costo / ganador / diferencia  | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
+| Datos de ejemplo, borrador inicial       | `src/features/comparison/lib/factories.ts`                                                    |
+| Reglas de validación y mensajes de error | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
+| Qué se guarda en `localStorage`          | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
+| Estado global y acciones                 | `src/store/app-store.ts` (`useAppStore`)                                                      |
+| Valores derivados del estado             | `src/store/selectors.ts`                                                                      |
+| Errores por campo para formularios       | `src/hooks/use-alt-validation.ts`                                                             |
+| Confirmar antes de salir con cambios     | `src/hooks/use-guarded-navigation.ts`                                                         |
+| Textos de los diálogos de confirmación   | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
+| Opciones del onboarding                  | `src/features/onboarding/constants.ts`                                                        |
+| Colores, radios, fuentes, animaciones    | `@theme` en `src/app/globals.css`                                                             |
+| Íconos SVG                               | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
+| Formato de soles y fechas                | `src/lib/format.ts`                                                                           |
+
+## Estado (Zustand)
+
+- `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición), `dirty` y `toast`.
+- Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` se pierde al recargar.
+- La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran.
+- Lee con selectores finos: `useAppStore((s) => s.saved)`, no `useAppStore()` entero.
+- Nunca uses `localStorage` directamente: pasa por el store.
+- `flash(mensaje)` muestra un toast global.
+
+## Convenciones
+
+- **Archivos** en kebab-case (`result-view.tsx`); **componentes** en PascalCase con export nombrado. Las `page.tsx`/`layout.tsx` usan `export default` (lo exige Next).
+- Imports con alias `@/` (→ `src/`). Dentro de una misma feature se permiten imports relativos.
+- **Tipos**: se derivan de Zod en `src/types/index.ts`. Si cambias los datos, cambia primero el esquema.
+- **Client vs server**: agrega `'use client'` solo en componentes con estado, hooks o eventos. Las páginas se mantienen como server components (exportan `metadata`).
+- **Textos de UI en español** (es-PE). Montos siempre con `money()`.
+- **Navegación**: usa `ButtonLink`/`Link` para ir a otra ruta; `router.push` solo cuando antes hay que ejecutar una acción del store (p. ej. `startNew()` y luego `/comparar`).
+- **Modales**: `ConfirmDialog` con un `preset`; se monta con portal en `<body>` (dentro de `<Screen>` quedaría bajo la barra inferior por el contexto de apilamiento de la animación).
+- **Tests** junto al archivo que prueban (`*.test.ts`). Toda lógica pura (cálculo, esquemas, store) debe tener test.
+
+## Estilos (Tailwind v4)
+
+- No hay `tailwind.config`; los tokens están en `@theme` dentro de `src/app/globals.css`:
+  colores `cream`, `forest`, `ink`, `accent` (naranja), `sage`, `paper`, `muted`, `line`, `danger`, `danger-soft`, `backdrop`; radios `rounded-ctl` / `rounded-card` / `rounded-sheet`; fuentes `font-sans` (DM Sans) / `font-serif` (Newsreader); animaciones `animate-enter|winner|fade|sheet|toast`.
+- Variante propia `short:` para pantallas de ≤720px de alto.
+- Usa los tokens en vez de colores hex sueltos. Combina clases con `cn()` (`src/lib/cn.ts`) para que las de `className` ganen.
+- Estilos globales de elementos van en `@layer base` (así las utilidades pueden sobrescribirlos). `h1` ya tiene tamaño/tracking base y `h1 em` usa la serif en verde.
+- Cada pantalla se envuelve en `<Screen>` (márgenes, espacio para la barra inferior, animación de entrada).
+
+## Recetas
+
+**Agregar una pantalla**
+
+1. Crea el componente en `src/features/<feature>/components/<nombre>-screen.tsx` usando `Screen` + `ScreenHeader`.
+2. Crea `src/app/(app)/<ruta>/page.tsx` (o `(onboarding)` si no lleva barra inferior ni es parte de la app principal) con `metadata` y el componente.
+3. Si debe mostrar la barra inferior, agrega la ruta a `ITEMS` en `src/components/layout/bottom-nav.tsx`.
+4. Agrega la fila a la tabla “Rutas → archivos” de este documento.
+
+**Agregar un campo a una alternativa** (p. ej. “seguro”)
+
+1. `altShape` en `src/schemas/comparison.schema.ts` (y su mensaje en `MESSAGES` si aplica).
+2. `blankAlt` en `src/features/comparison/lib/factories.ts`.
+3. La fórmula en `calculateCost` si afecta el costo.
+4. `FIELDS` en `alt-details-form.tsx` y una fila en `breakdown.tsx`.
+5. Tests en `calculate-cost.test.ts` y `comparison.schema.test.ts`.
+6. Si cambia la forma persistida de forma incompatible, sube la clave `STORAGE_KEY` o agrega `version`/`migrate` en el `persist` del store.
+
+**Agregar un diálogo de confirmación**: añade una entrada a `CONFIRM_PRESETS` y usa `<ConfirmDialog preset="…" open onCancel onConfirm />` con estado local `open`.
