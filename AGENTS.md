@@ -5,6 +5,8 @@ App web móvil (marco de 430px) que compara el **costo real** de dos alternativa
 **Fórmula de costo** (`src/features/comparison/lib/calculate-cost.ts`):
 `costo = precio − descuento − beneficio de pago + transporte + otros gastos` (redondeado a 2 decimales, mínimo 0). El **cashback** es referencial: se muestra aparte y **no** reduce el costo. Si la alternativa no pasa `altSchema`, el costo es `null`.
 
+Documentación para personas (presentación, instalación, capturas): `README.md`. Capturas en `docs/screenshots/`; si cambias una pantalla visible, actualiza su captura.
+
 ## Stack
 
 Next.js 16 (App Router, Turbopack) · React 19 · TypeScript 6 (strict) · Tailwind CSS v4 · Zustand 5 (`persist`) · Zod 4 · Vitest + Testing Library · ESLint 9 (`eslint-config-next`) · Prettier (+ plugin de Tailwind) · pnpm 11 · Node 22 (ver `.mise.toml`).
