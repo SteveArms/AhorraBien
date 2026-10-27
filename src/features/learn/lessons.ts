@@ -42,9 +42,9 @@ export const LESSONS: Lesson[] = [
     minutes: 1,
     card: {
       title: '¿El mayor descuento es la mejor compra?',
-      summary: 'Un 20 % de descuento puede salir más caro que no tener descuento.',
+      summary: 'Un 20 % de descuento puede salir más caro que no tener descuento.',
     },
-    title: { before: '¿Un descuento del ', em: '20 %', after: ' siempre es mejor?' },
+    title: { before: '¿Un descuento del ', em: '20 %', after: ' siempre es mejor?' },
     myth: 'La tienda con el porcentaje de descuento más alto es la más barata.',
     reality:
       'El porcentaje se calcula sobre el precio de esa tienda. Si su precio de partida es más alto o el envío es caro, terminas pagando más.',
@@ -54,7 +54,7 @@ export const LESSONS: Lesson[] = [
       options: {
         a: {
           label: 'Tienda A',
-          tag: '20 % de descuento',
+          tag: '20 % de descuento',
           alt: { ...blankAlt(120), discount: 24, transport: 15 },
         },
         b: { label: 'Tienda B', tag: 'Sin descuento, envío gratis', alt: blankAlt(105) },
@@ -65,7 +65,7 @@ export const LESSONS: Lesson[] = [
     takeaway: 'Compara cuánto sale de tu bolsillo al final, no el porcentaje del cartel.',
     steps: [
       'Ingresa el precio original de cada tienda.',
-      'En “Descuento inmediato” escribe el monto en soles: el 20 % de S/ 120 son S/ 24.',
+      'En “Descuento inmediato” escribe el monto en soles: el 20 % de S/ 120 son S/ 24.',
       'Suma el envío en “Transporte” y deja que AhorraBien calcule el total.',
     ],
   },
@@ -119,9 +119,9 @@ export const LESSONS: Lesson[] = [
     example: {
       product: 'Zapatillas',
       context:
-        'Unas zapatillas se venden en dos tiendas. Una ofrece 10 % de cashback si pagas con su billetera digital:',
+        'Unas zapatillas se venden en dos tiendas. Una ofrece 10 % de cashback si pagas con su billetera digital:',
       options: {
-        a: { label: 'Tienda A', tag: '10 % de cashback', alt: { ...blankAlt(200), cashback: 20 } },
+        a: { label: 'Tienda A', tag: '10 % de cashback', alt: { ...blankAlt(200), cashback: 20 } },
         b: { label: 'Tienda B', tag: 'Sin cashback', alt: blankAlt(190) },
       },
       winner: 'b',

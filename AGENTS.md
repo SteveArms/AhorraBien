@@ -112,7 +112,7 @@ Grupos de rutas:
 - Variante propia `short:` para pantallas de ≤720px de alto.
 - Usa los tokens en vez de colores hex sueltos. Combina clases con `cn()` (`src/lib/cn.ts`) para que las de `className` ganen.
 - Estilos globales de elementos van en `@layer base` (así las utilidades pueden sobrescribirlos). `h1` ya tiene tamaño/tracking base y `h1 em` usa la serif en verde.
-- Cada pantalla se envuelve en `<Screen>` (márgenes, ancho máximo, espacio para la barra inferior, animación de entrada). Su prop `size` fija el ancho del contenido (`SCREEN_WIDTHS`): `narrow` (600px, por defecto: formularios, listas, lectura), `wide` (1040px: inicio, resultado, bienvenida) o `full` (la pantalla centra su contenido, p. ej. la banda verde de las lecciones).
+- Cada pantalla se envuelve en `<Screen>` (márgenes, ancho máximo, espacio para la barra inferior, animación de entrada). Su prop `size` fija el ancho del contenido (`SCREEN_WIDTHS`): `narrow` (600px, por defecto: formularios, listas, lectura) o `wide` (1040px: inicio, resultado, bienvenida).
 - **Responsive**: se diseña primero para móvil y se amplía con `md:` (≥768px, tablet: márgenes de 40px, diálogos centrados, rejillas de 2 columnas) y `lg:`/`xl:` (≥1024px: barra superior; ≥1280px: resultado en dos columnas). Usa `max-w-*` y `min-h-*` en vez de anchos o altos fijos, y comprueba 320px, 768px, 1024px y 1440px.
 
 ## Recetas

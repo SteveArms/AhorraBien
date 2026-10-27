@@ -33,7 +33,7 @@ export function ResultView() {
 
   if (!outcome) {
     return (
-      <Screen>
+      <Screen className="lg:pt-4">
         <ScreenHeader title="Resultado" backHref="/comparar" />
         <EmptyState
           title="No podemos calcular todavía"
@@ -48,11 +48,11 @@ export function ResultView() {
   const lesson = suggestLesson(draft)
 
   return (
-    <Screen size="wide">
+    <Screen size="wide" className="lg:pt-4">
       <ScreenHeader title="Resultado" backHref="/comparar" />
 
       <div className="xl:grid xl:grid-cols-2 xl:items-start xl:gap-14">
-        <section className="pt-6 xl:sticky xl:top-26">
+        <section className="pt-6 xl:sticky xl:top-20">
           {isExampleComparison(draft) && (
             <div className="mb-5 inline-block rounded-full border border-accent px-[9px] py-1.5 text-[9px] tracking-[.1em] text-accent">
               DATOS ILUSTRATIVOS

@@ -1,17 +1,29 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // Cantidad de pantallas visitadas en esta sesión sin recargar la página.
 let visitedScreens = 0
+let lastPath: string | null = null
 
 /** Registra cada cambio de ruta. Se monta una vez en el layout raíz (<NavigationTracker />). */
 export function useTrackNavigation() {
   const pathname = usePathname()
   useEffect(() => {
     visitedScreens += 1
+    lastPath = pathname
   }, [pathname])
+}
+
+/**
+ * Ruta desde la que se llegó a la pantalla actual, o null si se abrió directamente.
+ * Se lee en el primer render, antes de que el tracker registre la ruta actual.
+ */
+export function usePreviousPath() {
+  const pathname = usePathname()
+  const [previous] = useState(() => (lastPath !== pathname ? lastPath : null))
+  return previous
 }
 
 /**

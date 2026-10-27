@@ -27,6 +27,17 @@ describe('LESSONS', () => {
     }
   })
 
+  it('sus textos no tienen caracteres de control y no separan el número del %', () => {
+    const strings: string[] = []
+    JSON.stringify(LESSONS, (_, value) => {
+      if (typeof value === 'string') strings.push(value)
+      return value
+    })
+    const text = strings.join('\n')
+    expect(text).not.toMatch(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/)
+    expect(text).not.toMatch(/\d %/)
+  })
+
   it('getNextLesson devuelve la siguiente o undefined al final', () => {
     expect(getNextLesson(LESSONS[0].slug)).toBe(LESSONS[1])
     expect(getNextLesson(LESSONS.at(-1)!.slug)).toBeUndefined()

@@ -5,7 +5,6 @@ import { cn } from '@/lib/cn'
 export const SCREEN_WIDTHS = {
   narrow: 'max-w-[600px]',
   wide: 'max-w-[1040px]',
-  full: '',
 } as const
 
 type ScreenProps = {
