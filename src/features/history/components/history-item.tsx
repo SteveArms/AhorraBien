@@ -1,5 +1,6 @@
 import { Icon } from '@/components/ui/icon'
 import { compareAlternatives } from '@/features/comparison/lib/calculate-cost'
+import { isIllustrative } from '@/features/comparison/lib/illustrative'
 import { formatShortDate, money } from '@/lib/format'
 import type { Comparison } from '@/types'
 
@@ -21,7 +22,14 @@ export function HistoryItem({ comparison, index, onOpen }: HistoryItemProps) {
         {String(index + 1).padStart(2, '0')}
       </span>
       <div className="grid min-w-0 gap-[5px]">
-        <strong className="truncate">{comparison.product}</strong>
+        <div className="flex min-w-0 items-center gap-2">
+          <strong className="truncate">{comparison.product}</strong>
+          {isIllustrative(comparison) && (
+            <span className="shrink-0 rounded-full border border-accent-strong px-2 py-0.5 text-[9px] font-bold tracking-[.1em] text-accent-strong">
+              EJEMPLO
+            </span>
+          )}
+        </div>
         <small className="text-[10px] text-muted">
           {formatShortDate(comparison.date)} · Resultado: {tie ? 'Empate' : winner.toUpperCase()}
         </small>

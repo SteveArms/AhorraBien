@@ -37,6 +37,8 @@ type AppActions = {
   save: () => void
   removeCurrent: () => void
   clearHistory: () => void
+  /** Borra objetivo, dificultades, historial y borrador: la app queda como recién instalada. */
+  resetAll: () => void
   flash: (message: string, tone?: ToastTone) => void
 }
 
@@ -91,6 +93,8 @@ export const useAppStore = create<AppStore>()(
       removeCurrent: () =>
         set(({ saved, draft }) => ({ saved: saved.filter((c) => c.id !== draft.id) })),
       clearHistory: () => set({ saved: [] }),
+      resetAll: () =>
+        set({ goal: '', difficulties: [], saved: [], draft: initialComparison(), dirty: false }),
 
       flash: (message, tone = 'success') => {
         clearTimeout(toastTimer)

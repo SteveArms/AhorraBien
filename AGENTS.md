@@ -67,26 +67,27 @@ Grupos de rutas:
 
 ### ¿Dónde está…?
 
-| Necesito…                                     | Archivo                                                                                       |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Cálculo de costo / ganador / diferencia       | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
-| Datos de ejemplo, borrador inicial            | `src/features/comparison/lib/factories.ts`                                                    |
-| Reglas de validación y mensajes de error      | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
-| Qué se guarda en `localStorage`               | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
-| Estado global y acciones                      | `src/store/app-store.ts` (`useAppStore`)                                                      |
-| Valores derivados del estado                  | `src/store/selectors.ts`                                                                      |
-| Errores por campo para formularios            | `src/hooks/use-alt-validation.ts`                                                             |
-| Confirmar antes de salir con cambios          | `src/hooks/use-guarded-navigation.ts`                                                         |
-| Textos de los diálogos de confirmación        | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
-| Contenido de las lecciones, lección sugerida  | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                  |
-| Volver atrás con ruta de respaldo             | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                      |
-| Opciones del onboarding                       | `src/features/onboarding/constants.ts`                                                        |
-| Dificultades/objetivo → temas, pesos, filas   | `src/features/personalization/topics.ts` (`topicWeights`, `highlightedFields`)                |
-| Detector de ilusiones (alertas del resultado) | `src/features/comparison/lib/detect-illusions.ts` + `components/illusion-alerts.tsx`          |
-| Lecciones ordenadas para el usuario           | `rankLessons` en `src/features/learn/lessons.ts`                                              |
-| Colores, radios, fuentes, animaciones         | `@theme` en `src/app/globals.css`                                                             |
-| Íconos SVG                                    | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
-| Formato de soles y fechas                     | `src/lib/format.ts`                                                                           |
+| Necesito…                                     | Archivo                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Cálculo de costo / ganador / diferencia       | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)                  |
+| Datos de ejemplo, borrador inicial            | `src/features/comparison/lib/factories.ts`                                                                |
+| ¿Es un ejemplo? (etiqueta, historial, ahorro) | `isIllustrative` en `src/features/comparison/lib/illustrative.ts` (producto y montos, no basta el nombre) |
+| Reglas de validación y mensajes de error      | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`)             |
+| Qué se guarda en `localStorage`               | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`                        |
+| Estado global y acciones                      | `src/store/app-store.ts` (`useAppStore`)                                                                  |
+| Valores derivados del estado                  | `src/store/selectors.ts`                                                                                  |
+| Errores por campo para formularios            | `src/hooks/use-alt-validation.ts`                                                                         |
+| Confirmar antes de salir con cambios          | `src/hooks/use-guarded-navigation.ts`                                                                     |
+| Textos de los diálogos de confirmación        | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                               |
+| Contenido de las lecciones, lección sugerida  | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                              |
+| Volver atrás con ruta de respaldo             | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                                  |
+| Opciones del onboarding                       | `src/features/onboarding/constants.ts`                                                                    |
+| Dificultades/objetivo → temas, pesos, filas   | `src/features/personalization/topics.ts` (`topicWeights`, `highlightedFields`)                            |
+| Detector de ilusiones (alertas del resultado) | `src/features/comparison/lib/detect-illusions.ts` + `components/illusion-alerts.tsx`                      |
+| Lecciones ordenadas para el usuario           | `rankLessons` en `src/features/learn/lessons.ts`                                                          |
+| Colores, radios, fuentes, animaciones         | `@theme` en `src/app/globals.css`                                                                         |
+| Íconos SVG                                    | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                             |
+| Formato de soles y fechas                     | `src/lib/format.ts`                                                                                       |
 
 ## Estado (Zustand)
 

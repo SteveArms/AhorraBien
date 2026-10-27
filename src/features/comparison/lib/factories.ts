@@ -30,7 +30,3 @@ export const exampleComparison = (): Comparison => ({
   a: { ...blankAlt(100), discount: 10, transport: 4 },
   b: { ...blankAlt(95), benefit: 5, transport: 2 },
 })
-
-/** Se muestra la etiqueta "Datos ilustrativos" mientras el producto sea el del ejemplo. */
-export const isExampleComparison = (comparison: Pick<Comparison, 'product'>) =>
-  comparison.product === EXAMPLE_PRODUCT

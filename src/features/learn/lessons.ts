@@ -195,14 +195,6 @@ export function suggestLesson({ a, b }: Pick<Comparison, 'a' | 'b'>): Lesson {
 
 export const lessonForTopic = (topic: Topic) => LESSONS.find((lesson) => lesson.topic === topic)
 
-/** Cuenta como ejemplo solo si coinciden el producto y los montos, no basta el nombre. */
-export const isLessonExample = ({ product, a, b }: Pick<Comparison, 'product' | 'a' | 'b'>) =>
-  LESSONS.some(
-    ({ example }) =>
-      example.product === product &&
-      JSON.stringify([example.options.a.alt, example.options.b.alt]) === JSON.stringify([a, b]),
-  )
-
 /** Sin preferencias se mantiene el orden original. */
 export function rankLessons(preferences: Preferences) {
   const weights = topicWeights(preferences)

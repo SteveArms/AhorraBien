@@ -22,6 +22,14 @@ export const CONFIRM_PRESETS = {
     cancelLabel: 'Conservar historial',
     confirmLabel: 'Borrar historial',
   },
+  deleteEverything: {
+    icon: 'trash',
+    title: '¿Borrar todos tus datos?',
+    description:
+      'Se eliminarán tu objetivo, tus dificultades y todas las comparaciones guardadas en este dispositivo. Esta acción no se puede deshacer',
+    cancelLabel: 'Conservar mis datos',
+    confirmLabel: 'Borrar todo',
+  },
   discard: {
     icon: 'info',
     title: '¿Descartar los cambios?',

@@ -10,6 +10,23 @@ beforeEach(() => {
 })
 
 describe('app store', () => {
+  it('resetAll deja la app como recién instalada', () => {
+    const { setGoal, toggleDifficulty, loadExample, save, resetAll } = useAppStore.getState()
+    setGoal('Gastar menos en mis compras')
+    toggleDifficulty('Calcular transporte y gastos extra')
+    loadExample()
+    save()
+
+    resetAll()
+    const state = useAppStore.getState()
+    expect(state).toMatchObject({ goal: '', difficulties: [], saved: [], dirty: false })
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).state).toEqual({
+      goal: '',
+      difficulties: [],
+      saved: [],
+    })
+  })
+
   it('guarda el borrador en el historial (sin duplicar) y lo marca limpio', () => {
     const { loadExample, setProduct, save } = useAppStore.getState()
     loadExample()

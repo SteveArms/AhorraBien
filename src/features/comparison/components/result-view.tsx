@@ -15,10 +15,10 @@ import { useAppStore } from '@/store/app-store'
 import { selectIsDraftSaved } from '@/store/selectors'
 import type { AltField } from '@/types'
 import { LessonCard } from '@/features/learn/components/lesson-card'
-import { isLessonExample, suggestLesson } from '@/features/learn/lessons'
+import { suggestLesson } from '@/features/learn/lessons'
 import { highlightedFields, topicWeights } from '@/features/personalization/topics'
 import { detectIllusions } from '../lib/detect-illusions'
-import { isExampleComparison } from '../lib/factories'
+import { isIllustrative } from '../lib/illustrative'
 import { Breakdown } from './breakdown'
 import { CostBlock } from './cost-block'
 import { IllusionAlerts } from './illusion-alerts'
@@ -74,7 +74,7 @@ export function ResultView() {
 
       <div className="xl:grid xl:grid-cols-2 xl:items-start xl:gap-14">
         <section className="pt-6 xl:sticky xl:top-20">
-          {(isExampleComparison(draft) || isLessonExample(draft)) && (
+          {isIllustrative(draft) && (
             <div className="mb-5 inline-block rounded-full border border-accent-strong px-[9px] py-1.5 text-[9px] tracking-[.1em] text-accent-strong">
               DATOS ILUSTRATIVOS
             </div>

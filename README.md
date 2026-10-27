@@ -65,13 +65,13 @@ Todo funciona en tu dispositivo: no hay cuentas, servidores ni datos bancarios.
 | Comparación A vs B    | Nombre del producto y precio de cada alternativa, con validación en tiempo real y mensajes de error accesibles.                                                                                                        |
 | Detalles opcionales   | Descuento inmediato, beneficio de pago, transporte, otros gastos y cashback referencial.                                                                                                                               |
 | Resultado             | Alternativa ganadora, diferencia en soles, recomendación, desglose de cada costo y estado «Guardada en tu historial» tras guardar.                                                                                     |
-| Historial             | Comparaciones guardadas con fecha, resultado y diferencia; se pueden abrir o eliminar.                                                                                                                                 |
-| Inicio                | Carrusel de lecciones, última comparación y ahorro potencial acumulado.                                                                                                                                                |
+| Historial             | Comparaciones guardadas con fecha, resultado y diferencia; los ejemplos se marcan como «Ejemplo». Se pueden abrir o eliminar.                                                                                          |
+| Inicio                | Carrusel de lecciones, última comparación y ahorro potencial acumulado (solo de tus comparaciones, sin contar ejemplos).                                                                                               |
 | Aprendizaje           | 4 lecciones (descuentos, transporte, cashback y gastos extra). Cada una muestra lo que parece, lo que realmente pasa, un ejemplo resuelto, la idea clave y cómo aplicarla; el ejemplo se puede abrir en el comparador. |
 | Detector de ilusiones | El resultado avisa de lo que podría engañarte (el mayor descuento no ganó, los gastos se comen el descuento, el cashback llega después…) y prioriza lo que marcaste como difícil.                                      |
 | Personalización       | Tus dificultades y tu objetivo ordenan las lecciones del inicio (con la insignia «Para ti») y resaltan esas filas en el desglose.                                                                                      |
 | Lección sugerida      | El resultado recomienda la lección más útil según los datos de la comparación (p. ej. cashback).                                                                                                                       |
-| Perfil                | Objetivo elegido, lo que más te cuesta (editables), moneda, cómo se calculan los costos e información de privacidad.                                                                                                   |
+| Perfil                | Objetivo elegido, lo que más te cuesta (editables), moneda, cómo se calculan los costos, privacidad y «Borrar todos mis datos».                                                                                        |
 | Protección de cambios | Si sales del formulario con cambios sin guardar, se te pide confirmar.                                                                                                                                                 |
 
 ## Cómo se calcula el costo real
@@ -271,7 +271,7 @@ Las pruebas cubren:
 
 - Tus preferencias e historial se guardan **solo en tu navegador** (`localStorage`). La comparación que estás editando se conserva al recargar, solo en esa pestaña (`sessionStorage`).
 - No hay registro, servidores, analítica ni recolección de datos personales o bancarios.
-- Puedes borrar todo el historial desde **Perfil → Eliminar historial**.
+- Puedes borrar el historial desde **Perfil → Eliminar historial**, o todo (objetivo, dificultades e historial) desde **Perfil → Borrar todos mis datos**.
 - El sitio se publica con `noindex` para que no aparezca en buscadores.
 
 ## Contribuir

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState, type ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
@@ -62,8 +63,12 @@ export function ProfileScreen() {
   const difficulties = useAppStore((s) => s.difficulties)
   const hasHistory = useAppStore((s) => s.saved.length > 0)
   const clearHistory = useAppStore((s) => s.clearHistory)
+  const resetAll = useAppStore((s) => s.resetAll)
   const flash = useAppStore((s) => s.flash)
+  const router = useRouter()
   const [confirmClear, setConfirmClear] = useState(false)
+  const [confirmReset, setConfirmReset] = useState(false)
+  const hasData = goal !== '' || difficulties.length > 0 || hasHistory
 
   return (
     <Screen className="lg:max-w-[1040px] lg:pt-4">
@@ -116,18 +121,29 @@ export function ProfileScreen() {
             </Disclosure>
             <Disclosure title="Información de privacidad">
               Tus preferencias e historial se guardan solo en este dispositivo. No solicitamos
-              información bancaria ni datos personales.
+              información bancaria ni datos personales, y puedes borrarlo todo cuando quieras.
             </Disclosure>
           </section>
-          {hasHistory && (
-            <Button
-              variant="danger"
-              icon="trash"
-              className="mt-5 w-full"
-              onClick={() => setConfirmClear(true)}
-            >
-              Eliminar historial
-            </Button>
+          {hasData && (
+            <div className="mt-5 grid gap-1">
+              {hasHistory && (
+                <Button
+                  variant="danger"
+                  icon="trash"
+                  className="w-full"
+                  onClick={() => setConfirmClear(true)}
+                >
+                  Eliminar historial
+                </Button>
+              )}
+              <Button
+                variant="text"
+                className="w-full text-danger"
+                onClick={() => setConfirmReset(true)}
+              >
+                Borrar todos mis datos
+              </Button>
+            </div>
           )}
         </div>
       </div>
@@ -140,6 +156,17 @@ export function ProfileScreen() {
           clearHistory()
           setConfirmClear(false)
           flash('Historial eliminado')
+        }}
+      />
+      <ConfirmDialog
+        preset="deleteEverything"
+        open={confirmReset}
+        onCancel={() => setConfirmReset(false)}
+        onConfirm={() => {
+          resetAll()
+          setConfirmReset(false)
+          router.push('/')
+          flash('Borramos todos tus datos', 'info')
         }}
       />
     </Screen>
