@@ -24,13 +24,13 @@ export function NumberField({
 }: NumberFieldProps) {
   const errorId = useId()
   return (
-    <label className="grid gap-2">
+    <label className="grid content-start gap-2">
       <span className="text-[11px] font-bold tracking-[.07em] text-muted uppercase">{label}</span>
       <div
         className={cn(
-          'flex min-h-[55px] items-center rounded-ctl border border-line px-3',
+          'flex min-h-[55px] items-center rounded-ctl border border-line px-4 transition-[border-color,box-shadow] duration-200 focus-within:border-forest focus-within:ring-3 focus-within:ring-forest/15',
           surface === 'cream' ? 'bg-cream' : 'bg-paper',
-          error && 'border-danger',
+          error && 'border-danger focus-within:border-danger focus-within:ring-danger/15',
         )}
       >
         <b>{prefix}</b>
@@ -43,7 +43,7 @@ export function NumberField({
           onChange={(e) => onChange(e.target.value === '' ? NaN : Number(e.target.value))}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
-          className="w-full min-w-0 border-0 bg-transparent pl-1.5 text-xl font-bold"
+          className="w-full min-w-0 border-0 bg-transparent pl-1.5 text-xl font-bold outline-hidden"
         />
       </div>
       {error && (

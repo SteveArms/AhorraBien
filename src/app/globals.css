@@ -71,8 +71,8 @@
     color: inherit;
     cursor: pointer;
   }
+  /* Los campos de formulario dibujan su propio foco (borde verde + halo). */
   button:focus-visible,
-  input:focus-visible,
   summary:focus-visible,
   a:focus-visible {
     outline: 3px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
