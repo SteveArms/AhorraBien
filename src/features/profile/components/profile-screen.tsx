@@ -11,15 +11,34 @@ import { Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useAppStore } from '@/store/app-store'
 
-function InfoRow({ label, value, action }: { label: string; value: string; action?: ReactNode }) {
+function InfoRow({
+  label,
+  value,
+  action,
+}: {
+  label: string
+  value: ReactNode
+  action?: ReactNode
+}) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-line py-[18px] last:border-b-0">
       <div className="grid min-w-0 gap-[5px]">
         <small className="text-[9px] tracking-[.1em] text-muted">{label}</small>
-        <strong>{value}</strong>
+        {typeof value === 'string' ? <strong>{value}</strong> : value}
       </div>
       {action}
     </div>
+  )
+}
+
+function ChangeLink({ href }: { href: string }) {
+  return (
+    <Link
+      href={href}
+      className="shrink-0 rounded-full border border-line px-3.5 py-2 text-xs font-bold text-forest transition-colors duration-150 hover:border-forest hover:bg-sage"
+    >
+      Cambiar
+    </Link>
   )
 }
 
@@ -40,6 +59,7 @@ function Disclosure({ title, children }: { title: string; children: string }) {
 
 export function ProfileScreen() {
   const goal = useAppStore((s) => s.goal)
+  const difficulties = useAppStore((s) => s.difficulties)
   const hasHistory = useAppStore((s) => s.saved.length > 0)
   const clearHistory = useAppStore((s) => s.clearHistory)
   const flash = useAppStore((s) => s.flash)
@@ -57,7 +77,7 @@ export function ProfileScreen() {
             <Eyebrow>Tus preferencias</Eyebrow>
             <h1 className="mt-[7px] text-[36px]">Compra a tu manera.</h1>
             <p className="mt-3 hidden leading-normal text-muted lg:block">
-              Ajusta tu objetivo y revisa cómo calculamos y cuidamos tus datos.
+              Ajusta tu objetivo y lo que más te cuesta: con eso priorizamos lecciones y alertas.
             </p>
           </div>
         </section>
@@ -67,14 +87,27 @@ export function ProfileScreen() {
             <InfoRow
               label="OBJETIVO SELECCIONADO"
               value={goal || 'Aún no seleccionado'}
-              action={
-                <Link
-                  href="/onboarding/objetivo"
-                  className="shrink-0 rounded-full border border-line px-3.5 py-2 text-xs font-bold text-forest transition-colors duration-150 hover:border-forest hover:bg-sage"
-                >
-                  Cambiar
-                </Link>
+              action={<ChangeLink href="/onboarding/objetivo" />}
+            />
+            <InfoRow
+              label="LO QUE MÁS TE CUESTA"
+              value={
+                difficulties.length ? (
+                  <ul className="mt-1 flex flex-wrap gap-1.5">
+                    {difficulties.map((difficulty) => (
+                      <li
+                        key={difficulty}
+                        className="rounded-full bg-sage px-2.5 py-1 text-xs font-semibold text-forest"
+                      >
+                        {difficulty}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'Aún no seleccionado'
+                )
               }
+              action={<ChangeLink href="/onboarding/dificultades" />}
             />
             <InfoRow label="MONEDA" value="Soles peruanos (S/)" />
             <Disclosure title="Cómo se calculan los costos">

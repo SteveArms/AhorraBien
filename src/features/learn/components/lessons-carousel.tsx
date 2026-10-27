@@ -1,10 +1,16 @@
+'use client'
+
 import Link from 'next/link'
 import { Eyebrow } from '@/components/ui/eyebrow'
-import { LESSONS } from '../lessons'
+import { useAppStore } from '@/store/app-store'
+import { rankLessons } from '../lessons'
 import { LessonCard } from './lesson-card'
 
-/** Sección del inicio con las lecciones en un carrusel horizontal. */
+/** Sección del inicio con las lecciones, primero las que más le sirven al usuario. */
 export function LessonsCarousel() {
+  const goal = useAppStore((s) => s.goal)
+  const difficulties = useAppStore((s) => s.difficulties)
+  const ranked = rankLessons({ goal, difficulties })
   return (
     <section className="pt-8" aria-labelledby="lessons-title">
       <div className="flex items-end justify-between">
@@ -19,8 +25,8 @@ export function LessonsCarousel() {
         </Link>
       </div>
       <div className="-mx-[22px] mt-4 flex snap-x snap-mandatory scroll-px-[22px] [scrollbar-width:none] gap-3 overflow-x-auto px-[22px] pb-2 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
-        {LESSONS.map((lesson) => (
-          <LessonCard key={lesson.slug} lesson={lesson} />
+        {ranked.map(({ lesson, score }) => (
+          <LessonCard key={lesson.slug} lesson={lesson} recommended={score > 0} />
         ))}
       </div>
     </section>

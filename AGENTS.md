@@ -67,23 +67,26 @@ Grupos de rutas:
 
 ### ¿Dónde está…?
 
-| Necesito…                                    | Archivo                                                                                       |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Cálculo de costo / ganador / diferencia      | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
-| Datos de ejemplo, borrador inicial           | `src/features/comparison/lib/factories.ts`                                                    |
-| Reglas de validación y mensajes de error     | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
-| Qué se guarda en `localStorage`              | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
-| Estado global y acciones                     | `src/store/app-store.ts` (`useAppStore`)                                                      |
-| Valores derivados del estado                 | `src/store/selectors.ts`                                                                      |
-| Errores por campo para formularios           | `src/hooks/use-alt-validation.ts`                                                             |
-| Confirmar antes de salir con cambios         | `src/hooks/use-guarded-navigation.ts`                                                         |
-| Textos de los diálogos de confirmación       | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
-| Contenido de las lecciones, lección sugerida | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                  |
-| Volver atrás con ruta de respaldo            | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                      |
-| Opciones del onboarding                      | `src/features/onboarding/constants.ts`                                                        |
-| Colores, radios, fuentes, animaciones        | `@theme` en `src/app/globals.css`                                                             |
-| Íconos SVG                                   | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
-| Formato de soles y fechas                    | `src/lib/format.ts`                                                                           |
+| Necesito…                                     | Archivo                                                                                       |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Cálculo de costo / ganador / diferencia       | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)      |
+| Datos de ejemplo, borrador inicial            | `src/features/comparison/lib/factories.ts`                                                    |
+| Reglas de validación y mensajes de error      | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`) |
+| Qué se guarda en `localStorage`               | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`            |
+| Estado global y acciones                      | `src/store/app-store.ts` (`useAppStore`)                                                      |
+| Valores derivados del estado                  | `src/store/selectors.ts`                                                                      |
+| Errores por campo para formularios            | `src/hooks/use-alt-validation.ts`                                                             |
+| Confirmar antes de salir con cambios          | `src/hooks/use-guarded-navigation.ts`                                                         |
+| Textos de los diálogos de confirmación        | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                   |
+| Contenido de las lecciones, lección sugerida  | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                  |
+| Volver atrás con ruta de respaldo             | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                      |
+| Opciones del onboarding                       | `src/features/onboarding/constants.ts`                                                        |
+| Dificultades/objetivo → temas, pesos, filas   | `src/features/personalization/topics.ts` (`topicWeights`, `highlightedFields`)                |
+| Detector de ilusiones (alertas del resultado) | `src/features/comparison/lib/detect-illusions.ts` + `components/illusion-alerts.tsx`          |
+| Lecciones ordenadas para el usuario           | `rankLessons` en `src/features/learn/lessons.ts`                                              |
+| Colores, radios, fuentes, animaciones         | `@theme` en `src/app/globals.css`                                                             |
+| Íconos SVG                                    | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                 |
+| Formato de soles y fechas                     | `src/lib/format.ts`                                                                           |
 
 ## Estado (Zustand)
 
@@ -136,9 +139,10 @@ Grupos de rutas:
 **Agregar una lección**
 
 1. Agrega un objeto a `LESSONS` en `src/features/learn/lessons.ts` (slug en kebab-case, `number` correlativo).
-2. El ejemplo usa `Alt` reales: declara `winner` y escribe la conclusión con `{diff}` (se reemplaza por la diferencia calculada; no escribas el monto a mano).
-3. `pnpm test`: `lessons.test.ts` falla si el ganador declarado no coincide con el cálculo.
-4. La ruta `/aprender/<slug>`, la tarjeta del inicio y el índice se generan solos. Si aplica, ajusta `suggestLesson`.
+2. Asígnale un `topic` (`discount`, `transport`, `extras` o `payment`): conecta la lección con las dificultades del onboarding y con las alertas del resultado.
+3. El ejemplo usa `Alt` reales: declara `winner` y escribe la conclusión con `{diff}` (se reemplaza por la diferencia calculada; no escribas el monto a mano).
+4. `pnpm test`: `lessons.test.ts` falla si el ganador declarado no coincide con el cálculo.
+5. La ruta `/aprender/<slug>`, la tarjeta del inicio y el índice se generan solos. Si aplica, ajusta `suggestLesson`.
 
 **Agregar un diálogo de confirmación**: añade una entrada a `CONFIRM_PRESETS` y usa `<ConfirmDialog preset="…" open onCancel onConfirm />` con estado local `open`.
 

@@ -12,12 +12,26 @@ import { useComparisonResult } from '@/hooks/use-comparison-result'
 import { money } from '@/lib/format'
 import { useAppStore } from '@/store/app-store'
 import { selectIsDraftSaved } from '@/store/selectors'
+import type { AltField } from '@/types'
 import { LessonCard } from '@/features/learn/components/lesson-card'
 import { suggestLesson } from '@/features/learn/lessons'
+import { highlightedFields, topicWeights } from '@/features/personalization/topics'
+import { detectIllusions } from '../lib/detect-illusions'
 import { isExampleComparison } from '../lib/factories'
 import { Breakdown } from './breakdown'
 import { CostBlock } from './cost-block'
+import { IllusionAlerts } from './illusion-alerts'
 import { Verdict } from './verdict'
+
+const FIELD_LABELS: Record<AltField, string> = {
+  price: 'el precio',
+  discount: 'el descuento',
+  benefit: 'el beneficio de pago',
+  transport: 'el transporte',
+  extras: 'otros gastos',
+  cashback: 'el cashback',
+}
+const FIELD_NAMES = new Intl.ListFormat('es', { type: 'conjunction' })
 
 /** Resultado de la comparación del borrador actual (/resultado). */
 export function ResultView() {
@@ -28,6 +42,8 @@ export function ResultView() {
   const startNew = useAppStore((s) => s.startNew)
   const removeCurrent = useAppStore((s) => s.removeCurrent)
   const flash = useAppStore((s) => s.flash)
+  const goal = useAppStore((s) => s.goal)
+  const difficulties = useAppStore((s) => s.difficulties)
   const { outcome } = useComparisonResult(draft)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -46,6 +62,8 @@ export function ResultView() {
 
   const { aCost, bCost, winner, difference } = outcome
   const lesson = suggestLesson(draft)
+  const illusions = detectIllusions(draft, topicWeights({ goal, difficulties }))
+  const highlight = highlightedFields(difficulties)
 
   return (
     <Screen size="wide" className="lg:pt-4">
@@ -73,6 +91,7 @@ export function ResultView() {
             <CostBlock label="Alternativa B" cost={bCost} winner={winner === 'b'} />
           </div>
           <Verdict outcome={outcome} />
+          <IllusionAlerts illusions={illusions} difficulties={difficulties} />
         </section>
 
         <div className="xl:pt-6">
@@ -81,8 +100,14 @@ export function ResultView() {
               <span className="font-bold">Cómo llegamos al resultado</span>
               <small className="text-[10px] text-muted">Desglose transparente</small>
             </div>
-            <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} />
-            <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} />
+            {highlight.length > 0 && (
+              <p className="mt-2 text-xs leading-normal text-muted">
+                Resaltamos {FIELD_NAMES.format(highlight.map((field) => FIELD_LABELS[field]))}{' '}
+                porque marcaste que te cuesta calcularlo.
+              </p>
+            )}
+            <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} highlight={highlight} />
+            <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} highlight={highlight} />
           </section>
 
           <section className="pt-7">

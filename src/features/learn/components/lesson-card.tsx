@@ -10,11 +10,21 @@ type LessonCardProps = {
    * - `featured`: tarjeta destacada en verde (sugerencia en el resultado).
    */
   variant?: 'carousel' | 'row' | 'featured'
+  /** Muestra la insignia "Para ti" (según el onboarding del usuario). */
+  recommended?: boolean
+}
+
+function ForYou() {
+  return (
+    <span className="rounded-full bg-forest px-2 py-1 text-[10px] font-bold text-paper">
+      Para ti
+    </span>
+  )
 }
 
 const href = (lesson: Lesson) => `/aprender/${lesson.slug}`
 
-export function LessonCard({ lesson, variant = 'carousel' }: LessonCardProps) {
+export function LessonCard({ lesson, variant = 'carousel', recommended }: LessonCardProps) {
   const { number, minutes, card } = lesson
 
   if (variant === 'row') {
@@ -25,6 +35,11 @@ export function LessonCard({ lesson, variant = 'carousel' }: LessonCardProps) {
       >
         <span className="font-serif text-[30px] leading-none text-accent italic">{number}</span>
         <div className="grid gap-1">
+          {recommended && (
+            <span className="justify-self-start">
+              <ForYou />
+            </span>
+          )}
           <strong className="leading-tight">{card.title}</strong>
           <p className="text-[13px] leading-snug text-muted">{card.summary}</p>
         </div>
@@ -58,8 +73,11 @@ export function LessonCard({ lesson, variant = 'carousel' }: LessonCardProps) {
     >
       <div className="flex items-start justify-between">
         <span className="font-serif text-[34px] leading-none text-accent italic">{number}</span>
-        <span className="rounded-full bg-sage px-2 py-1 text-[10px] font-bold text-forest">
-          {minutes} min
+        <span className="flex gap-1.5">
+          {recommended && <ForYou />}
+          <span className="rounded-full bg-sage px-2 py-1 text-[10px] font-bold text-forest">
+            {minutes} min
+          </span>
         </span>
       </div>
       <strong className="mt-4 text-[17px] leading-tight tracking-[-.02em]">{card.title}</strong>

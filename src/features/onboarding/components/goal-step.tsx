@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/icon'
 import { Progress } from '@/components/ui/progress'
 import { Screen, StickyActions } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
+import { usePreviousPath } from '@/hooks/use-back-navigation'
 import { useAppStore } from '@/store/app-store'
 import { GOALS } from '../constants'
 
@@ -15,10 +16,11 @@ export function GoalStep() {
   const router = useRouter()
   const goal = useAppStore((s) => s.goal)
   const setGoal = useAppStore((s) => s.setGoal)
+  const fromProfile = usePreviousPath() === '/perfil'
 
   return (
     <Screen>
-      <ScreenHeader title="Tu punto de partida" backHref="/" />
+      <ScreenHeader title="Tu punto de partida" backHref={fromProfile ? '/perfil' : '/'} />
       <Progress step={1} />
       <section>
         <Eyebrow>Una sola elección</Eyebrow>
@@ -32,8 +34,11 @@ export function GoalStep() {
         </div>
       </section>
       <StickyActions>
-        <Button disabled={!goal} onClick={() => router.push('/onboarding/dificultades')}>
-          Continuar <Icon name="arrow" />
+        <Button
+          disabled={!goal}
+          onClick={() => router.push(fromProfile ? '/perfil' : '/onboarding/dificultades')}
+        >
+          {fromProfile ? 'Guardar y volver al perfil' : 'Continuar'} <Icon name="arrow" />
         </Button>
       </StickyActions>
     </Screen>

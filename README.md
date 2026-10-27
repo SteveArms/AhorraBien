@@ -68,8 +68,10 @@ Todo funciona en tu dispositivo: no hay cuentas, servidores ni datos bancarios.
 | Historial             | Comparaciones guardadas con fecha, resultado y diferencia; se pueden abrir o eliminar.                                                                                                                                 |
 | Inicio                | Carrusel de lecciones, última comparación y ahorro potencial acumulado.                                                                                                                                                |
 | Aprendizaje           | 4 lecciones (descuentos, transporte, cashback y gastos extra). Cada una muestra lo que parece, lo que realmente pasa, un ejemplo resuelto, la idea clave y cómo aplicarla; el ejemplo se puede abrir en el comparador. |
+| Detector de ilusiones | El resultado avisa de lo que podría engañarte (el mayor descuento no ganó, los gastos se comen el descuento, el cashback llega después…) y prioriza lo que marcaste como difícil.                                      |
+| Personalización       | Tus dificultades y tu objetivo ordenan las lecciones del inicio (con la insignia «Para ti») y resaltan esas filas en el desglose.                                                                                      |
 | Lección sugerida      | El resultado recomienda la lección más útil según los datos de la comparación (p. ej. cashback).                                                                                                                       |
-| Perfil                | Objetivo elegido, moneda, cómo se calculan los costos e información de privacidad.                                                                                                                                     |
+| Perfil                | Objetivo elegido, lo que más te cuesta (editables), moneda, cómo se calculan los costos e información de privacidad.                                                                                                   |
 | Protección de cambios | Si sales del formulario con cambios sin guardar, se te pide confirmar.                                                                                                                                                 |
 
 ## Cómo se calcula el costo real
@@ -125,7 +127,7 @@ La alternativa B te ahorra **S/ 2.00**, aunque A tenía un descuento mayor.
 
 ## Requisitos
 
-- **Node.js 22** o superior (mínimo 20.9, que es lo que exige Next.js 16)
+- **Node.js 22** o superior (lo fija el campo `engines` de `package.json`)
 - **pnpm 11**
 
 Si usas [mise](https://mise.jdx.dev/), las versiones correctas se instalan solas con el archivo `.mise.toml`:
@@ -134,7 +136,7 @@ Si usas [mise](https://mise.jdx.dev/), las versiones correctas se instalan solas
 mise install
 ```
 
-Si no, puedes activar pnpm con Corepack:
+Si no, puedes activar pnpm con Corepack, que usa la versión fijada en el campo `packageManager` de `package.json`:
 
 ```bash
 corepack enable
@@ -145,7 +147,7 @@ corepack prepare pnpm@11.1.1 --activate
 
 ```bash
 # 1. Clona el repositorio
-git clone <url-del-repositorio> ahorrabien
+git clone https://github.com/VictorMA18/AhorraBien.git ahorrabien
 cd ahorrabien
 
 # 2. Instala las dependencias
@@ -261,7 +263,8 @@ Las pruebas cubren:
 
 - **Cálculo de costos** (`calculate-cost.test.ts`): fórmula, redondeo, cashback, empates y casos inválidos.
 - **Validación** (`comparison.schema.test.ts`): mensajes de error por campo y reglas del producto y las alternativas.
-- **Lecciones** (`lessons.test.ts`): el ganador que afirma cada lección coincide con el cálculo real.
+- **Lecciones** (`lessons.test.ts`): el ganador que afirma cada lección coincide con el cálculo real y el orden por preferencias.
+- **Detector de ilusiones** (`detect-illusions.test.ts`) y **personalización** (`topics.test.ts`): cada alerta, su orden según el usuario y los campos resaltados.
 - **Store** (`app-store.test.ts`): guardar, abrir y eliminar comparaciones, persistencia y rehidratación con datos corruptos.
 
 ## Privacidad

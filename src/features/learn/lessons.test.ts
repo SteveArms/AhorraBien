@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest'
 import { compareAlternatives } from '@/features/comparison/lib/calculate-cost'
 import { blankAlt } from '@/features/comparison/lib/factories'
 import { comparisonSchema } from '@/schemas/comparison.schema'
-import { LESSONS, getNextLesson, lessonToComparison, suggestLesson } from './lessons'
+import {
+  LESSONS,
+  getNextLesson,
+  lessonForTopic,
+  lessonToComparison,
+  rankLessons,
+  suggestLesson,
+} from './lessons'
 
 describe('LESSONS', () => {
   it('tienen slugs y números únicos', () => {
@@ -41,6 +48,30 @@ describe('LESSONS', () => {
   it('getNextLesson devuelve la siguiente o undefined al final', () => {
     expect(getNextLesson(LESSONS[0].slug)).toBe(LESSONS[1])
     expect(getNextLesson(LESSONS.at(-1)!.slug)).toBeUndefined()
+  })
+})
+
+describe('rankLessons', () => {
+  it('sin preferencias mantiene el orden original', () => {
+    expect(rankLessons({ goal: '', difficulties: [] }).map((r) => r.lesson)).toEqual(LESSONS)
+  })
+
+  it('pone primero las lecciones de lo que más le cuesta al usuario', () => {
+    const ranked = rankLessons({
+      goal: 'Gastar menos en mis compras',
+      difficulties: ['Entender los beneficios de pago'],
+    })
+    expect(ranked.map((r) => r.lesson.slug).slice(0, 2)).toEqual([
+      'cashback-llega-despues',
+      'gastos-pequenos-suman',
+    ])
+    expect(ranked.at(-1)!.score).toBe(0)
+  })
+
+  it('cada tema tiene su lección', () => {
+    for (const topic of ['discount', 'transport', 'extras', 'payment'] as const) {
+      expect(lessonForTopic(topic)?.topic).toBe(topic)
+    }
   })
 })
 

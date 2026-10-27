@@ -1,5 +1,6 @@
 import { blankAlt } from '@/features/comparison/lib/factories'
-import type { Alt, AltKey, Comparison } from '@/types'
+import { topicWeights, type Topic } from '@/features/personalization/topics'
+import type { Alt, AltKey, Comparison, Preferences } from '@/types'
 
 export type LessonOption = {
   /** Nombre corto de la opción, p. ej. "Tienda A". */
@@ -13,6 +14,8 @@ export type Lesson = {
   slug: string
   number: string
   minutes: number
+  /** Tema que enseña; conecta la lección con las dificultades del onboarding. */
+  topic: Topic
   /** Texto de la tarjeta (inicio, resultado, índice). */
   card: { title: string; summary: string }
   /** Título de la lección; `em` va en cursiva serif. */
@@ -39,6 +42,7 @@ export const LESSONS: Lesson[] = [
   {
     slug: 'descuento-o-precio-final',
     number: '01',
+    topic: 'discount',
     minutes: 1,
     card: {
       title: '¿El mayor descuento es la mejor compra?',
@@ -72,6 +76,7 @@ export const LESSONS: Lesson[] = [
   {
     slug: 'transporte-tambien-cuesta',
     number: '02',
+    topic: 'transport',
     minutes: 1,
     card: {
       title: 'El transporte también es parte del precio',
@@ -107,6 +112,7 @@ export const LESSONS: Lesson[] = [
   {
     slug: 'cashback-llega-despues',
     number: '03',
+    topic: 'payment',
     minutes: 1,
     card: {
       title: 'El cashback no es un descuento',
@@ -138,6 +144,7 @@ export const LESSONS: Lesson[] = [
   {
     slug: 'gastos-pequenos-suman',
     number: '04',
+    topic: 'extras',
     minutes: 1,
     card: {
       title: 'Los gastos pequeños suman',
@@ -185,6 +192,19 @@ export function suggestLesson({ a, b }: Pick<Comparison, 'a' | 'b'>): Lesson {
   if (a.extras > 0 || b.extras > 0) return pick('gastos-pequenos-suman')
   if (a.transport !== b.transport) return pick('transporte-tambien-cuesta')
   return pick('descuento-o-precio-final')
+}
+
+export const lessonForTopic = (topic: Topic) => LESSONS.find((lesson) => lesson.topic === topic)
+
+/**
+ * Lecciones ordenadas por relevancia para el usuario (objetivo y dificultades del onboarding).
+ * Sin preferencias se mantiene el orden original.
+ */
+export function rankLessons(preferences: Preferences) {
+  const weights = topicWeights(preferences)
+  return LESSONS.map((lesson) => ({ lesson, score: weights[lesson.topic] ?? 0 })).sort(
+    (x, y) => y.score - x.score,
+  )
 }
 
 /** Convierte el ejemplo de una lección en un borrador para el comparador. */

@@ -7,16 +7,21 @@ import { Icon } from '@/components/ui/icon'
 import { Progress } from '@/components/ui/progress'
 import { Screen, StickyActions } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
+import { usePreviousPath } from '@/hooks/use-back-navigation'
 import { useAppStore } from '@/store/app-store'
 import { DIFFICULTIES } from '../constants'
 
 export function DifficultyStep() {
   const difficulties = useAppStore((s) => s.difficulties)
   const toggleDifficulty = useAppStore((s) => s.toggleDifficulty)
+  const fromProfile = usePreviousPath() === '/perfil'
 
   return (
     <Screen>
-      <ScreenHeader title="Tu punto de partida" backHref="/onboarding/objetivo" />
+      <ScreenHeader
+        title="Tu punto de partida"
+        backHref={fromProfile ? '/perfil' : '/onboarding/objetivo'}
+      />
       <Progress step={2} />
       <section>
         <Eyebrow>Puedes elegir varias</Eyebrow>
@@ -34,12 +39,20 @@ export function DifficultyStep() {
         </div>
       </section>
       <StickyActions>
-        <ButtonLink href="/demo">
-          Continuar <Icon name="arrow" />
-        </ButtonLink>
-        <ButtonLink href="/onboarding/objetivo" variant="text">
-          Volver
-        </ButtonLink>
+        {fromProfile ? (
+          <ButtonLink href="/perfil">
+            Guardar y volver al perfil <Icon name="arrow" />
+          </ButtonLink>
+        ) : (
+          <>
+            <ButtonLink href="/demo">
+              Continuar <Icon name="arrow" />
+            </ButtonLink>
+            <ButtonLink href="/onboarding/objetivo" variant="text">
+              Volver
+            </ButtonLink>
+          </>
+        )}
       </StickyActions>
     </Screen>
   )

@@ -4,12 +4,16 @@ import { Eyebrow } from '@/components/ui/eyebrow'
 import { Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useBackNavigation } from '@/hooks/use-back-navigation'
-import { LESSONS } from '../lessons'
+import { useAppStore } from '@/store/app-store'
+import { LESSONS, rankLessons } from '../lessons'
 import { LessonCard } from './lesson-card'
 
 /** Lista de todas las lecciones (/aprender). */
 export function LessonsIndexScreen() {
   const back = useBackNavigation('/inicio')
+  const goal = useAppStore((s) => s.goal)
+  const difficulties = useAppStore((s) => s.difficulties)
+  const scores = new Map(rankLessons({ goal, difficulties }).map((r) => [r.lesson, r.score]))
   return (
     <Screen>
       <ScreenHeader title="Aprendizaje" onBack={back} />
@@ -26,7 +30,12 @@ export function LessonsIndexScreen() {
       </section>
       <section className="border-t border-line">
         {LESSONS.map((lesson) => (
-          <LessonCard key={lesson.slug} lesson={lesson} variant="row" />
+          <LessonCard
+            key={lesson.slug}
+            lesson={lesson}
+            variant="row"
+            recommended={(scores.get(lesson) ?? 0) > 0}
+          />
         ))}
       </section>
     </Screen>
