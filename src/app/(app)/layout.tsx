@@ -1,13 +1,17 @@
 import type { ReactNode } from 'react'
 import { BottomNavSlot } from '@/components/layout/bottom-nav-slot'
 import { HydrationGate } from '@/components/layout/hydration-gate'
+import { StorageNotice } from '@/components/layout/storage-notice'
 
 /** Pantallas principales: esperan la hidratación del store y muestran la navegación principal. */
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <HydrationGate>
       {/* Hueco para la barra superior (64px) desde `lg`. */}
-      <div className="lg:pt-16">{children}</div>
+      <div className="lg:pt-16">
+        <StorageNotice />
+        {children}
+      </div>
       <BottomNavSlot />
     </HydrationGate>
   )

@@ -1,18 +1,24 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 import { exampleComparison, initialComparison } from '@/features/comparison/lib/factories'
 import { persistedStateSchema } from '@/schemas/persisted-state.schema'
 import type { Alt, AltField, AltKey, Comparison, PersistedState } from '@/types'
+import { createSafeStorage, type StorageStatus } from './safe-storage'
 
 export const STORAGE_KEY = 'ahorrabien:v1'
 const TOAST_MS = 2200
+const safeStorage = createSafeStorage<PersistedState>()
+export const getStorageStatus = safeStorage.getStatus
+
+export type ToastTone = 'success' | 'info'
 
 type AppState = PersistedState & {
   /** Comparación en edición o en pantalla de resultado. No se persiste. */
   draft: Comparison
   /** Hay cambios en el borrador que no se guardaron en el historial. */
   dirty: boolean
-  toast: string | null
+  toast: { message: string; tone: ToastTone } | null
+  storageStatus: StorageStatus
 }
 
 type AppActions = {
@@ -30,7 +36,7 @@ type AppActions = {
   save: () => void
   removeCurrent: () => void
   clearHistory: () => void
-  flash: (message: string) => void
+  flash: (message: string, tone?: ToastTone) => void
 }
 
 export type AppStore = AppState & AppActions
@@ -46,6 +52,7 @@ export const useAppStore = create<AppStore>()(
       draft: initialComparison(),
       dirty: false,
       toast: null,
+      storageStatus: 'ok',
 
       setGoal: (goal) => set({ goal }),
       toggleDifficulty: (difficulty) =>
@@ -84,15 +91,15 @@ export const useAppStore = create<AppStore>()(
         set(({ saved, draft }) => ({ saved: saved.filter((c) => c.id !== draft.id) })),
       clearHistory: () => set({ saved: [] }),
 
-      flash: (message) => {
+      flash: (message, tone = 'success') => {
         clearTimeout(toastTimer)
-        set({ toast: message })
+        set({ toast: { message, tone } })
         toastTimer = setTimeout(() => set({ toast: null }), TOAST_MS)
       },
     }),
     {
       name: STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
+      storage: safeStorage.storage,
       // La hidratación la dispara <StoreHydrator /> en el cliente para evitar desajustes con SSR.
       skipHydration: true,
       partialize: ({ goal, difficulties, saved }): PersistedState => ({

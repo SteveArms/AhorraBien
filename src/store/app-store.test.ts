@@ -22,7 +22,7 @@ describe('app store', () => {
     expect(state.saved).toHaveLength(1)
     expect(state.saved[0].product).toBe('Mochila')
     expect(state.dirty).toBe(false)
-    expect(state.toast).toBe('Comparación guardada')
+    expect(state.toast).toEqual({ message: 'Comparación guardada', tone: 'success' })
     expect(selectIsDraftSaved(state)).toBe(true)
     expect(selectTotalSavings(state)).toBe(2)
   })

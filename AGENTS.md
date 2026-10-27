@@ -92,10 +92,11 @@ Grupos de rutas:
 
 - `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición), `dirty` y `toast`.
 - Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` se pierde al recargar.
-- La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran.
+- La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran. El almacenamiento pasa por `createSafeStorage` (`src/store/safe-storage.ts`): JSON dañado → se descarta y `storageStatus` vale `'reset'` (aviso); sin `localStorage` → memoria y `'unavailable'` (franja `StorageNotice`).
 - Lee con selectores finos: `useAppStore((s) => s.saved)`, no `useAppStore()` entero.
 - Nunca uses `localStorage` directamente: pasa por el store.
-- `flash(mensaje)` muestra un toast global.
+- `flash(mensaje, tono?)` muestra un toast global (`'success'` por defecto, `'info'` para avisos).
+- Errores de renderizado: `src/app/error.tsx` (dentro del layout) y `src/app/global-error.tsx` (si falla el layout raíz). En Next 16 reciben `retry`, no `reset`.
 
 ## Convenciones
 

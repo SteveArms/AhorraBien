@@ -10,10 +10,10 @@ export function Toast() {
   return (
     <div
       role="status"
-      className="fixed bottom-[95px] left-1/2 z-40 flex -translate-x-1/2 animate-toast items-center gap-[7px] rounded-full bg-ink px-[17px] py-[11px] text-[13px] whitespace-nowrap text-paper lg:bottom-8"
+      className="fixed bottom-[95px] left-1/2 z-40 flex w-max max-w-[calc(100vw-44px)] -translate-x-1/2 animate-toast items-center gap-[7px] rounded-[22px] bg-ink px-[17px] py-[11px] text-[13px] leading-snug text-paper lg:bottom-8"
     >
-      <Icon name="check" />
-      {toast}
+      <Icon name={toast.tone === 'info' ? 'info' : 'check'} />
+      {toast.message}
     </div>
   )
 }

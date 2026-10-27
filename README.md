@@ -248,7 +248,7 @@ flowchart LR
 
 - **Esquemas como fuente de verdad:** las reglas de validación y los tipos de TypeScript se derivan de Zod.
 - **Lógica pura y probada:** el cálculo de costos no depende de React y tiene pruebas unitarias.
-- **Persistencia segura:** al cargar se validan los datos guardados; si están corruptos se ignoran y la app sigue funcionando.
+- **Persistencia segura:** los datos guardados se validan al cargar. Si están dañados se descartan con un aviso; si el navegador bloquea el almacenamiento, la app funciona en memoria y muestra una franja explicándolo. Los errores inesperados muestran una pantalla en español con «Reintentar» y «Volver al inicio».
 - **Componentes por dominio:** cada carpeta de `features/` reúne sus pantallas, y las piezas reutilizables viven en `components/`.
 
 Para convenciones de código, recetas (agregar pantallas o campos) y un mapa detallado de archivos, consulta **[AGENTS.md](AGENTS.md)**.
@@ -265,7 +265,7 @@ Las pruebas cubren:
 - **Validación** (`comparison.schema.test.ts`): mensajes de error por campo y reglas del producto y las alternativas.
 - **Lecciones** (`lessons.test.ts`): el ganador que afirma cada lección coincide con el cálculo real y el orden por preferencias.
 - **Detector de ilusiones** (`detect-illusions.test.ts`) y **personalización** (`topics.test.ts`): cada alerta, su orden según el usuario y los campos resaltados.
-- **Store** (`app-store.test.ts`): guardar, abrir y eliminar comparaciones, persistencia y rehidratación con datos corruptos.
+- **Store** (`app-store.test.ts`, `safe-storage.test.ts`): guardar, abrir y eliminar comparaciones, persistencia, datos dañados, almacenamiento bloqueado y cuota llena.
 
 ## Privacidad
 
