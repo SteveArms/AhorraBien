@@ -269,7 +269,7 @@ Las pruebas cubren:
 
 ## Privacidad
 
-- Tus preferencias e historial se guardan **solo en tu navegador** (`localStorage`).
+- Tus preferencias e historial se guardan **solo en tu navegador** (`localStorage`). La comparación que estás editando se conserva al recargar, solo en esa pestaña (`sessionStorage`).
 - No hay registro, servidores, analítica ni recolección de datos personales o bancarios.
 - Puedes borrar todo el historial desde **Perfil → Eliminar historial**.
 - El sitio se publica con `noindex` para que no aparezca en buscadores.

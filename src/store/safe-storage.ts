@@ -1,8 +1,15 @@
-import type { PersistStorage, StorageValue } from 'zustand/middleware'
+import type { StorageValue } from 'zustand/middleware'
 
 export type StorageStatus = 'ok' | 'unavailable' | 'reset'
 
 type KeyValueStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
+
+// Síncrono a propósito: compatible con `persist` y legible sin await.
+type SyncPersistStorage<S> = {
+  getItem: (name: string) => StorageValue<S> | null
+  setItem: (name: string, value: StorageValue<S>) => void
+  removeItem: (name: string) => void
+}
 
 function memoryStorage(): KeyValueStorage {
   const data = new Map<string, string>()
@@ -13,9 +20,9 @@ function memoryStorage(): KeyValueStorage {
   }
 }
 
-function browserStorage(): KeyValueStorage | null {
+export function webStorage(get: () => Storage = () => window.localStorage): KeyValueStorage | null {
   try {
-    const storage = window.localStorage
+    const storage = get()
     const probe = '__ahorrabien__'
     storage.setItem(probe, probe)
     storage.removeItem(probe)
@@ -26,7 +33,7 @@ function browserStorage(): KeyValueStorage | null {
 }
 
 /** Storage de `persist` que no rompe la app: usa memoria si no hay localStorage y descarta JSON dañado. */
-export function createSafeStorage<S>(resolve: () => KeyValueStorage | null = browserStorage) {
+export function createSafeStorage<S>(resolve: () => KeyValueStorage | null = webStorage) {
   let backend: KeyValueStorage | undefined
   let status: StorageStatus = 'ok'
 
@@ -39,7 +46,7 @@ export function createSafeStorage<S>(resolve: () => KeyValueStorage | null = bro
     return backend
   }
 
-  const storage: PersistStorage<S> = {
+  const storage: SyncPersistStorage<S> = {
     getItem: (name) => {
       const raw = get().getItem(name)
       if (raw === null) return null

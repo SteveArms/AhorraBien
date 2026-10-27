@@ -11,6 +11,7 @@ import { useAppStore } from '@/store/app-store'
 export function WelcomeScreen() {
   const router = useRouter()
   const loadExample = useAppStore((s) => s.loadExample)
+  const returning = useAppStore((s) => s.goal !== '' || s.saved.length > 0)
 
   return (
     <Screen size="wide" className="flex flex-col pb-[26px] lg:pb-10">
@@ -55,9 +56,15 @@ export function WelcomeScreen() {
           </div>
 
           <div className="mt-auto grid gap-[5px] pt-6 lg:mt-0 lg:max-w-[360px] lg:pt-10">
-            <ButtonLink href="/onboarding/objetivo">
-              Empezar <Icon name="arrow" />
-            </ButtonLink>
+            {returning ? (
+              <ButtonLink href="/inicio">
+                Ir a mi inicio <Icon name="arrow" />
+              </ButtonLink>
+            ) : (
+              <ButtonLink href="/onboarding/objetivo">
+                Empezar <Icon name="arrow" />
+              </ButtonLink>
+            )}
             <Button
               variant="text"
               onClick={() => {
@@ -67,6 +74,9 @@ export function WelcomeScreen() {
             >
               Explorar una demostración
             </Button>
+            <p className="mt-3 text-center text-xs leading-normal text-muted">
+              Sin cuentas ni pagos. Tus datos se guardan solo en este dispositivo.
+            </p>
           </div>
         </div>
       </div>

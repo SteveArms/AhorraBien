@@ -91,7 +91,7 @@ Grupos de rutas:
 ## Estado (Zustand)
 
 - `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición), `dirty` y `toast`.
-- Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` se pierde al recargar.
+- Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` y `dirty` se guardan por pestaña en `sessionStorage` (`src/store/draft-session.ts`, clave `ahorrabien:borrador`) y se restauran dentro de `merge`, junto al resto del estado: así una recarga no lo pierde y no se sobrescribe `localStorage` antes de leerlo.
 - La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran. El almacenamiento pasa por `createSafeStorage` (`src/store/safe-storage.ts`): JSON dañado → se descarta y `storageStatus` vale `'reset'` (aviso); sin `localStorage` → memoria y `'unavailable'` (franja `StorageNotice`).
 - Lee con selectores finos: `useAppStore((s) => s.saved)`, no `useAppStore()` entero.
 - Nunca uses `localStorage` directamente: pasa por el store.

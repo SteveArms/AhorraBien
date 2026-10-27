@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { exampleComparison, initialComparison } from '@/features/comparison/lib/factories'
 import { persistedStateSchema } from '@/schemas/persisted-state.schema'
 import type { Alt, AltField, AltKey, Comparison, PersistedState } from '@/types'
+import { readDraftSession } from './draft-session'
 import { createSafeStorage, type StorageStatus } from './safe-storage'
 
 export const STORAGE_KEY = 'ahorrabien:v1'
@@ -108,9 +109,10 @@ export const useAppStore = create<AppStore>()(
         saved,
       }),
       // Datos corruptos o de otra versión no deben romper la app: se ignoran.
+      // El borrador de la pestaña se restaura aquí para llegar junto al historial, en una sola escritura.
       merge: (persisted, current) => {
         const parsed = persistedStateSchema.safeParse(persisted)
-        return parsed.success ? { ...current, ...parsed.data } : current
+        return { ...current, ...(parsed.success ? parsed.data : {}), ...readDraftSession() }
       },
     },
   ),
