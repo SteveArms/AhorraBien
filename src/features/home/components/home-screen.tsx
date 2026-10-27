@@ -24,8 +24,8 @@ export function HomeScreen() {
   const last = saved[0]
 
   return (
-    <Screen>
-      <header className="flex h-12 items-center justify-between">
+    <Screen size="wide" className="lg:pt-8">
+      <header className="flex h-12 items-center justify-between lg:hidden">
         <div className="flex items-center gap-2.5">
           <Mark size="sm" />
           <strong>AhorraBien</strong>
@@ -39,7 +39,7 @@ export function HomeScreen() {
         </Link>
       </header>
 
-      <section className="border-b border-line pt-[50px] pb-9">
+      <section className="border-b border-line pt-[50px] pb-9 lg:pt-0">
         <Eyebrow>Hola, compara con calma</Eyebrow>
         <h1 className="mt-3 mb-[18px]">
           Compra mejor,
@@ -51,7 +51,7 @@ export function HomeScreen() {
         </p>
         <Button
           icon="plus"
-          className="mt-7 w-full"
+          className="mt-7 w-full md:w-auto md:px-8"
           onClick={() => {
             startNew()
             router.push('/comparar')

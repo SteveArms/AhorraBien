@@ -18,7 +18,7 @@ export function LessonsCarousel() {
           Ver todas
         </Link>
       </div>
-      <div className="-mx-[22px] mt-4 flex snap-x snap-mandatory scroll-px-[22px] [scrollbar-width:none] gap-3 overflow-x-auto px-[22px] pb-2">
+      <div className="-mx-[22px] mt-4 flex snap-x snap-mandatory scroll-px-[22px] [scrollbar-width:none] gap-3 overflow-x-auto px-[22px] pb-2 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
         {LESSONS.map((lesson) => (
           <LessonCard key={lesson.slug} lesson={lesson} />
         ))}

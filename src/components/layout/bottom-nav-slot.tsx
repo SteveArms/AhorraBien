@@ -3,8 +3,8 @@
 import { usePathname } from 'next/navigation'
 import { BOTTOM_NAV_PATHS, BottomNav } from './bottom-nav'
 
-/** Muestra la barra inferior solo en las rutas de BOTTOM_NAV_PATHS. */
+/** Barra inferior en móvil (solo en BOTTOM_NAV_PATHS); barra superior desde `lg`. */
 export function BottomNavSlot() {
   const pathname = usePathname()
-  return BOTTOM_NAV_PATHS.includes(pathname) ? <BottomNav /> : null
+  return <BottomNav showOnMobile={BOTTOM_NAV_PATHS.includes(pathname)} />
 }

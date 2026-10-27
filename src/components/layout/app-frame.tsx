@@ -1,12 +1,7 @@
 import type { ReactNode } from 'react'
 
-/** Marco tipo teléfono (máx. 430px) centrado en pantalla. */
+/** Contenedor raíz a todo el ancho. */
 export function AppFrame({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex min-h-dvh justify-center bg-backdrop">
-      <div className="relative min-h-dvh w-full max-w-[430px] overflow-x-hidden bg-cream shadow-[0_0_50px_#24272018]">
-        {children}
-      </div>
-    </div>
-  )
+  // `clip` en vez de `hidden` para no romper `position: sticky`.
+  return <div className="relative min-h-dvh overflow-x-clip bg-cream">{children}</div>
 }

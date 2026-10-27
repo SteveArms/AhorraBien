@@ -52,7 +52,7 @@ export function AltDetailsForm({ altKey }: { altKey: AltKey }) {
         <small className="text-xs text-muted">El cashback posterior no reduce este importe.</small>
       </section>
 
-      <section className="grid gap-[17px] pt-[22px]">
+      <section className="grid gap-[17px] pt-[22px] md:grid-cols-2 md:gap-x-4">
         {FIELDS.map(({ field, label }) => (
           <NumberField
             key={field}

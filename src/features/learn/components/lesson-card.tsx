@@ -54,7 +54,7 @@ export function LessonCard({ lesson, variant = 'carousel' }: LessonCardProps) {
   return (
     <Link
       href={href(lesson)}
-      className="flex w-[236px] shrink-0 snap-start flex-col rounded-card border border-line bg-paper p-[18px] transition-transform duration-200 active:scale-[.98]"
+      className="flex w-[236px] shrink-0 snap-start flex-col rounded-card border border-line bg-paper p-[18px] transition-transform duration-200 active:scale-[.98] md:w-auto"
     >
       <div className="flex items-start justify-between">
         <span className="font-serif text-[34px] leading-none text-accent italic">{number}</span>

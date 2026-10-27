@@ -10,7 +10,7 @@ export function Toast() {
   return (
     <div
       role="status"
-      className="fixed bottom-[95px] left-1/2 z-40 flex -translate-x-1/2 animate-toast items-center gap-[7px] rounded-full bg-ink px-[17px] py-[11px] text-[13px] whitespace-nowrap text-paper"
+      className="fixed bottom-[95px] left-1/2 z-40 flex -translate-x-1/2 animate-toast items-center gap-[7px] rounded-full bg-ink px-[17px] py-[11px] text-[13px] whitespace-nowrap text-paper lg:bottom-8"
     >
       <Icon name="check" />
       {toast}

@@ -46,7 +46,7 @@ Al comprar, solemos comparar solo el precio de la etiqueta o el porcentaje de de
 
 ### La propuesta
 
-**AhorraBien** es una aplicación web pensada para el celular que:
+**AhorraBien** es una aplicación web responsive, pensada primero para el celular y adaptada a tablet y escritorio, que:
 
 1. Te deja ingresar **dos alternativas** de compra (A y B) con su precio y, si quieres, sus descuentos, beneficios de pago, transporte, otros gastos y cashback.
 2. Calcula el **costo real** de cada una y te dice **cuál conviene y por cuánto**.
@@ -155,7 +155,7 @@ pnpm install
 pnpm dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000). Para verla como en un celular, usa el modo responsive del navegador (unos 390 px de ancho).
+Abre [http://localhost:3000](http://localhost:3000). La interfaz se adapta al ancho de la ventana: en celular muestra una barra inferior, en tablet amplía márgenes y rejillas, y en escritorio (desde 1024 px) usa una barra superior. Usa el modo responsive del navegador para probar cada tamaño.
 
 ### Build de producción
 
@@ -193,9 +193,9 @@ ahorrabien/
 ├── src/
 │   ├── app/                 Rutas (App Router), layouts y estilos globales
 │   │   ├── (onboarding)/    Objetivo, dificultades y demo
-│   │   ├── (app)/           Pantallas principales con barra inferior
+│   │   ├── (app)/           Pantallas principales con navegación (barra inferior o superior)
 │   │   ├── globals.css      Tailwind + tokens de diseño (@theme)
-│   │   └── layout.tsx       Layout raíz: fuentes, metadata, marco móvil
+│   │   └── layout.tsx       Layout raíz: fuentes, metadata, contenedor de la app
 │   ├── components/
 │   │   ├── ui/              Componentes genéricos (Button, NumberField, ConfirmDialog…)
 │   │   └── layout/          Estructura de pantalla (Screen, ScreenHeader, BottomNav…)

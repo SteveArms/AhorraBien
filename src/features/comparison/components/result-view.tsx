@@ -48,64 +48,68 @@ export function ResultView() {
   const lesson = suggestLesson(draft)
 
   return (
-    <Screen>
+    <Screen size="wide">
       <ScreenHeader title="Resultado" backHref="/comparar" />
 
-      <section className="pt-6">
-        {isExampleComparison(draft) && (
-          <div className="mb-5 inline-block rounded-full border border-accent px-[9px] py-1.5 text-[9px] tracking-[.1em] text-accent">
-            DATOS ILUSTRATIVOS
-          </div>
-        )}
-        <Eyebrow>{draft.product}</Eyebrow>
-        <h1 className="mt-2.5 mb-[27px]">
-          {winner === 'tie' ? (
-            'Ambas cuestan lo mismo.'
-          ) : (
-            <>
-              Puedes pagar <em>{money(difference)} menos.</em>
-            </>
+      <div className="xl:grid xl:grid-cols-2 xl:items-start xl:gap-14">
+        <section className="pt-6 xl:sticky xl:top-26">
+          {isExampleComparison(draft) && (
+            <div className="mb-5 inline-block rounded-full border border-accent px-[9px] py-1.5 text-[9px] tracking-[.1em] text-accent">
+              DATOS ILUSTRATIVOS
+            </div>
           )}
-        </h1>
-        <div className="grid grid-cols-2 gap-2.5">
-          <CostBlock label="Alternativa A" cost={aCost} winner={winner === 'a'} />
-          <CostBlock label="Alternativa B" cost={bCost} winner={winner === 'b'} />
+          <Eyebrow>{draft.product}</Eyebrow>
+          <h1 className="mt-2.5 mb-[27px]">
+            {winner === 'tie' ? (
+              'Ambas cuestan lo mismo.'
+            ) : (
+              <>
+                Puedes pagar <em>{money(difference)} menos.</em>
+              </>
+            )}
+          </h1>
+          <div className="grid grid-cols-2 gap-2.5">
+            <CostBlock label="Alternativa A" cost={aCost} winner={winner === 'a'} />
+            <CostBlock label="Alternativa B" cost={bCost} winner={winner === 'b'} />
+          </div>
+          <Verdict outcome={outcome} />
+        </section>
+
+        <div className="xl:pt-6">
+          <section className="border-t border-line pt-[25px] xl:border-t-0 xl:pt-0">
+            <div className="flex items-center justify-between">
+              <span className="font-bold">Cómo llegamos al resultado</span>
+              <small className="text-[10px] text-muted">Desglose transparente</small>
+            </div>
+            <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} />
+            <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} />
+          </section>
+
+          <section className="pt-7">
+            <LessonCard lesson={lesson} variant="featured" />
+          </section>
+
+          <div className="grid gap-2.5 pt-[25px]">
+            <Button onClick={save}>Guardar comparación</Button>
+            <ButtonLink href="/comparar" variant="secondary">
+              Editar comparación
+            </ButtonLink>
+            <Button
+              variant="text"
+              onClick={() => {
+                startNew()
+                router.push('/comparar')
+              }}
+            >
+              Nueva comparación
+            </Button>
+            {isSaved && (
+              <Button variant="text" onClick={() => setConfirmDelete(true)}>
+                Eliminar del historial
+              </Button>
+            )}
+          </div>
         </div>
-        <Verdict outcome={outcome} />
-      </section>
-
-      <section className="border-t border-line pt-[25px]">
-        <div className="flex items-center justify-between">
-          <span className="font-bold">Cómo llegamos al resultado</span>
-          <small className="text-[10px] text-muted">Desglose transparente</small>
-        </div>
-        <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} />
-        <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} />
-      </section>
-
-      <section className="pt-7">
-        <LessonCard lesson={lesson} variant="featured" />
-      </section>
-
-      <div className="grid gap-2.5 pt-[25px]">
-        <Button onClick={save}>Guardar comparación</Button>
-        <ButtonLink href="/comparar" variant="secondary">
-          Editar comparación
-        </ButtonLink>
-        <Button
-          variant="text"
-          onClick={() => {
-            startNew()
-            router.push('/comparar')
-          }}
-        >
-          Nueva comparación
-        </Button>
-        {isSaved && (
-          <Button variant="text" onClick={() => setConfirmDelete(true)}>
-            Eliminar del historial
-          </Button>
-        )}
       </div>
 
       <ConfirmDialog

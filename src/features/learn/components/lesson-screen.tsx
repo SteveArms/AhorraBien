@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation'
 import { Button, ButtonLink } from '@/components/ui/button'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { Icon } from '@/components/ui/icon'
-import { Screen } from '@/components/layout/screen'
+import { SCREEN_WIDTHS, Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useBackNavigation } from '@/hooks/use-back-navigation'
+import { cn } from '@/lib/cn'
 import { useAppStore } from '@/store/app-store'
 import { LESSONS, getNextLesson, lessonToComparison, type Lesson } from '../lessons'
 import { LessonExample } from './lesson-example'
@@ -21,27 +22,29 @@ export function LessonScreen({ lesson }: { lesson: Lesson }) {
   const position = LESSONS.findIndex((l) => l.slug === lesson.slug) + 1
 
   return (
-    <Screen className="px-0 pt-0">
-      <div className="bg-forest px-[22px] pt-[max(20px,env(safe-area-inset-top))] pb-9 text-paper">
-        <ScreenHeader title="Aprendizaje" onBack={back} tone="inverse" />
-        <div className="mt-8 flex items-end justify-between">
-          <span className="font-serif text-[96px] leading-[.8] text-accent italic">
-            {lesson.number}
-          </span>
-          <span className="rounded-full border border-white/25 px-2.5 py-1 text-[10px] tracking-[.1em]">
-            LECCIÓN {position} DE {LESSONS.length} · {lesson.minutes} MIN
-          </span>
+    <Screen size="full" className="px-0 pt-0 md:px-0 lg:pt-0">
+      <div className="bg-forest px-[22px] pt-[max(20px,env(safe-area-inset-top))] pb-9 text-paper md:px-10 lg:pt-10">
+        <div className={cn('mx-auto', SCREEN_WIDTHS.narrow)}>
+          <ScreenHeader title="Aprendizaje" onBack={back} tone="inverse" />
+          <div className="mt-8 flex items-end justify-between">
+            <span className="font-serif text-[96px] leading-[.8] text-accent italic">
+              {lesson.number}
+            </span>
+            <span className="rounded-full border border-white/25 px-2.5 py-1 text-[10px] tracking-[.1em]">
+              LECCIÓN {position} DE {LESSONS.length} · {lesson.minutes} MIN
+            </span>
+          </div>
+          <Eyebrow className="mt-7">Un minuto para comprar mejor</Eyebrow>
+          <h1 className="mt-2.5 [&_em]:text-accent">
+            {lesson.title.before}
+            <em>{lesson.title.em}</em>
+            {lesson.title.after}
+          </h1>
         </div>
-        <Eyebrow className="mt-7">Un minuto para comprar mejor</Eyebrow>
-        <h1 className="mt-2.5 [&_em]:text-accent">
-          {lesson.title.before}
-          <em>{lesson.title.em}</em>
-          {lesson.title.after}
-        </h1>
       </div>
 
-      <div className="px-[22px]">
-        <section className="grid gap-3 pt-7">
+      <div className={cn('mx-auto box-content px-[22px] md:px-10', SCREEN_WIDTHS.narrow)}>
+        <section className="grid gap-3 pt-7 md:grid-cols-2">
           <div className="rounded-card border border-line bg-paper p-[18px]">
             <small className="text-[9px] font-bold tracking-[.12em] text-muted">
               LO QUE PARECE

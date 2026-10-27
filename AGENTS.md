@@ -1,6 +1,6 @@
 # AhorraBien
 
-App web móvil (marco de 430px) que compara el **costo real** de dos alternativas de compra en soles (S/). Todo es local: no hay backend; preferencias e historial viven en `localStorage`.
+App web responsive (pensada primero para móvil) que compara el **costo real** de dos alternativas de compra en soles (S/). Todo es local: no hay backend; preferencias e historial viven en `localStorage`.
 
 **Fórmula de costo** (`src/features/comparison/lib/calculate-cost.ts`):
 `costo = precio − descuento − beneficio de pago + transporte + otros gastos` (redondeado a 2 decimales, mínimo 0). El **cashback** es referencial: se muestra aparte y **no** reduce el costo. Si la alternativa no pasa `altSchema`, el costo es `null`.
@@ -62,7 +62,7 @@ src/
 Grupos de rutas:
 
 - `(onboarding)/layout.tsx` y `(app)/layout.tsx` envuelven en `HydrationGate` (no renderizan hasta leer `localStorage`).
-- `(app)/layout.tsx` además monta `BottomNavSlot`, que muestra la barra inferior solo en `BOTTOM_NAV_PATHS` (`components/layout/bottom-nav.tsx`).
+- `(app)/layout.tsx` además monta `BottomNavSlot` (`components/layout/bottom-nav.tsx`): en móvil y tablet es una barra inferior visible solo en `BOTTOM_NAV_PATHS`; desde `lg` es una barra superior de 64px (logo a la izquierda, secciones a la derecha) en todas las pantallas de `(app)`, y el layout desplaza el contenido con `lg:pt-16`.
 - `src/app/layout.tsx`: fuentes (`next/font`), metadata, `StoreHydrator`, `AppFrame` y `Toast`.
 
 ### ¿Dónde está…?
@@ -108,19 +108,20 @@ Grupos de rutas:
 ## Estilos (Tailwind v4)
 
 - No hay `tailwind.config`; los tokens están en `@theme` dentro de `src/app/globals.css`:
-  colores `cream`, `forest`, `ink`, `accent` (naranja), `sage`, `paper`, `muted`, `line`, `danger`, `danger-soft`, `backdrop`; radios `rounded-ctl` / `rounded-card` / `rounded-sheet`; fuentes `font-sans` (DM Sans) / `font-serif` (Newsreader); animaciones `animate-enter|winner|fade|sheet|toast`.
+  colores `cream`, `forest`, `ink`, `accent` (naranja), `sage`, `paper`, `muted`, `line`, `danger`, `danger-soft`; radios `rounded-ctl` / `rounded-card` / `rounded-sheet`; fuentes `font-sans` (DM Sans) / `font-serif` (Newsreader); animaciones `animate-enter|winner|fade|sheet|toast`.
 - Variante propia `short:` para pantallas de ≤720px de alto.
 - Usa los tokens en vez de colores hex sueltos. Combina clases con `cn()` (`src/lib/cn.ts`) para que las de `className` ganen.
 - Estilos globales de elementos van en `@layer base` (así las utilidades pueden sobrescribirlos). `h1` ya tiene tamaño/tracking base y `h1 em` usa la serif en verde.
-- Cada pantalla se envuelve en `<Screen>` (márgenes, espacio para la barra inferior, animación de entrada).
+- Cada pantalla se envuelve en `<Screen>` (márgenes, ancho máximo, espacio para la barra inferior, animación de entrada). Su prop `size` fija el ancho del contenido (`SCREEN_WIDTHS`): `narrow` (600px, por defecto: formularios, listas, lectura), `wide` (1040px: inicio, resultado, bienvenida) o `full` (la pantalla centra su contenido, p. ej. la banda verde de las lecciones).
+- **Responsive**: se diseña primero para móvil y se amplía con `md:` (≥768px, tablet: márgenes de 40px, diálogos centrados, rejillas de 2 columnas) y `lg:`/`xl:` (≥1024px: barra superior; ≥1280px: resultado en dos columnas). Usa `max-w-*` y `min-h-*` en vez de anchos o altos fijos, y comprueba 320px, 768px, 1024px y 1440px.
 
 ## Recetas
 
 **Agregar una pantalla**
 
-1. Crea el componente en `src/features/<feature>/components/<nombre>-screen.tsx` usando `Screen` + `ScreenHeader`.
+1. Crea el componente en `src/features/<feature>/components/<nombre>-screen.tsx` usando `Screen` (elige su `size`) + `ScreenHeader`.
 2. Crea `src/app/(app)/<ruta>/page.tsx` (o `(onboarding)` si no lleva barra inferior ni es parte de la app principal) con `metadata` y el componente.
-3. Si debe mostrar la barra inferior, agrega la ruta a `ITEMS` en `src/components/layout/bottom-nav.tsx`.
+3. Si debe aparecer en la navegación principal, agrega la ruta a `ITEMS` en `src/components/layout/bottom-nav.tsx`.
 4. Agrega la fila a la tabla “Rutas → archivos” de este documento.
 
 **Agregar un campo a una alternativa** (p. ej. “seguro”)

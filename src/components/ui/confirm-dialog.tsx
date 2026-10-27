@@ -41,7 +41,7 @@ type ConfirmDialogProps = {
 }
 
 /**
- * Hoja inferior modal para confirmar acciones destructivas.
+ * Modal para confirmar acciones destructivas: hoja inferior en móvil, centrado desde tablet.
  * Se monta en <body> con un portal: dentro de <Screen> quedaría bajo la barra inferior
  * porque la animación de entrada crea un contexto de apilamiento.
  */
@@ -60,14 +60,14 @@ export function ConfirmDialog({ preset, open, onCancel, onConfirm }: ConfirmDial
     <div
       role="presentation"
       onMouseDown={onCancel}
-      className="fixed inset-0 z-30 flex animate-fade items-end justify-center bg-ink/55"
+      className="fixed inset-0 z-30 flex animate-fade items-end justify-center bg-ink/55 md:items-center md:p-6"
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-title"
         onMouseDown={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[430px] animate-sheet rounded-t-sheet bg-paper px-[22px] pt-7 pb-[max(24px,env(safe-area-inset-bottom))]"
+        className="relative w-full max-w-[430px] animate-sheet rounded-t-sheet bg-paper px-[22px] pt-7 pb-[max(24px,env(safe-area-inset-bottom))] md:max-w-[480px] md:rounded-sheet md:px-7 md:pb-7"
       >
         <button
           type="button"

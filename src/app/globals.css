@@ -15,7 +15,6 @@
   --color-line: #e5e0d4;
   --color-danger: #b83d35;
   --color-danger-soft: #f6e5df;
-  --color-backdrop: #d9d7cf;
 
   /* Radios: rounded-ctl (botones, inputs), rounded-card, rounded-sheet (modales). */
   --radius-ctl: 12px;
@@ -64,7 +63,7 @@
 
 @layer base {
   body {
-    background: var(--color-backdrop);
+    background: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-sans);
   }
