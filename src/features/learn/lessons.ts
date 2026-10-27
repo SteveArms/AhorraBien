@@ -14,7 +14,6 @@ export type Lesson = {
   slug: string
   number: string
   minutes: number
-  /** Tema que enseña; conecta la lección con las dificultades del onboarding. */
   topic: Topic
   /** Texto de la tarjeta (inicio, resultado, índice). */
   card: { title: string; summary: string }
@@ -196,10 +195,7 @@ export function suggestLesson({ a, b }: Pick<Comparison, 'a' | 'b'>): Lesson {
 
 export const lessonForTopic = (topic: Topic) => LESSONS.find((lesson) => lesson.topic === topic)
 
-/**
- * Lecciones ordenadas por relevancia para el usuario (objetivo y dificultades del onboarding).
- * Sin preferencias se mantiene el orden original.
- */
+/** Sin preferencias se mantiene el orden original. */
 export function rankLessons(preferences: Preferences) {
   const weights = topicWeights(preferences)
   return LESSONS.map((lesson) => ({ lesson, score: weights[lesson.topic] ?? 0 })).sort(

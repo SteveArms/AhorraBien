@@ -43,7 +43,7 @@ export function DemoScreen() {
         <h1 className="mt-2.5 mb-8">Dos precios parecidos pueden terminar costando diferente.</h1>
         <div className="grid grid-cols-[1fr_30px_1fr] items-center border-y border-line py-[22px]">
           <DemoSide label="Alternativa A" price="S/ 100" transport="+ S/ 4 transporte" />
-          <div className="grid size-[30px] place-items-center rounded-full border border-line text-[9px] text-accent">
+          <div className="grid size-[30px] place-items-center rounded-full border border-line text-[9px] text-accent-strong">
             VS
           </div>
           <DemoSide

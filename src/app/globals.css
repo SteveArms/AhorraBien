@@ -9,9 +9,11 @@
   --color-forest: #244d3b;
   --color-ink: #242720;
   --color-accent: #e58a52;
+  /* Acento con contraste AA (≥ 4.5:1) para texto e íconos. */
+  --color-accent-strong: #a24d08;
   --color-sage: #dce5d8;
   --color-paper: #fffefa;
-  --color-muted: #77796f;
+  --color-muted: #64665c;
   --color-line: #e5e0d4;
   --color-danger: #b83d35;
   --color-danger-soft: #f6e5df;
@@ -71,11 +73,11 @@
     color: inherit;
     cursor: pointer;
   }
-  /* Los campos de formulario dibujan su propio foco (borde verde + halo). */
+  /* Los inputs dibujan su propio foco. */
   button:focus-visible,
   summary:focus-visible,
   a:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+    outline: 3px solid var(--color-accent-strong);
     outline-offset: 2px;
   }
   h1 {

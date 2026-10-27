@@ -71,7 +71,7 @@ export function LessonScreen({ lesson }: { lesson: Lesson }) {
           <section className="grid gap-3 pt-3">
             <div className="rounded-card border border-accent/35 bg-accent/10 p-5">
               <div className="flex items-center gap-2.5">
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent text-paper">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent-strong text-paper">
                   <Icon name="alert" size={16} />
                 </span>
                 <small className="text-[11px] font-bold tracking-[.12em]">LO QUE PARECE</small>
@@ -96,7 +96,7 @@ export function LessonScreen({ lesson }: { lesson: Lesson }) {
           <LessonExample lesson={lesson} className="mt-8 lg:mt-0" />
 
           <aside className="mt-6 grid grid-cols-[36px_1fr] gap-3 rounded-card bg-forest p-5 text-paper">
-            <span className="grid size-9 place-items-center rounded-full bg-accent">
+            <span className="grid size-9 place-items-center rounded-full bg-accent-strong">
               <Icon name="check" size={18} />
             </span>
             <div>

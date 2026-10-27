@@ -19,7 +19,9 @@ export function CostBlock({ label, cost, winner, note }: CostBlockProps) {
       )}
     >
       <span className="text-[11px] text-muted">{label}</span>
-      {note && <span className="text-[11px] leading-tight font-bold text-accent">{note}</span>}
+      {note && (
+        <span className="text-[11px] leading-tight font-bold text-accent-strong">{note}</span>
+      )}
       <strong className="text-[clamp(24px,7vw,31px)] tracking-[-.06em] whitespace-nowrap">
         {money(cost)}
       </strong>

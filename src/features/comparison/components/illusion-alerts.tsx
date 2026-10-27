@@ -6,7 +6,6 @@ import type { Illusion } from '../lib/detect-illusions'
 
 type IllusionAlertsProps = { illusions: Illusion[]; difficulties: string[] }
 
-/** Detector de ilusiones: lo que podría hacer parecer más barata a la alternativa equivocada. */
 export function IllusionAlerts({ illusions, difficulties }: IllusionAlertsProps) {
   if (!illusions.length) return null
   return (
@@ -23,7 +22,7 @@ export function IllusionAlerts({ illusions, difficulties }: IllusionAlertsProps)
               key={illusion.id}
               className="grid grid-cols-[32px_1fr] gap-3 rounded-card border border-accent/35 bg-accent/10 p-4"
             >
-              <span className="grid size-8 place-items-center rounded-full bg-accent text-paper">
+              <span className="grid size-8 place-items-center rounded-full bg-accent-strong text-paper">
                 <Icon name="alert" size={16} />
               </span>
               <div className="min-w-0">

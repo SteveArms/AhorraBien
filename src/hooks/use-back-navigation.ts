@@ -16,10 +16,7 @@ export function useTrackNavigation() {
   }, [pathname])
 }
 
-/**
- * Ruta desde la que se llegó a la pantalla actual, o null si se abrió directamente.
- * Se lee en el primer render, antes de que el tracker registre la ruta actual.
- */
+/** Ruta anterior o null; se lee antes de que el tracker registre la actual. */
 export function usePreviousPath() {
   const pathname = usePathname()
   const [previous] = useState(() => (lastPath !== pathname ? lastPath : null))

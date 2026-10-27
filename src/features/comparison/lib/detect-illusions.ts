@@ -15,10 +15,7 @@ const label = (key: AltKey) => key.toUpperCase()
 const reductions = (alt: Alt) => alt.discount + alt.benefit
 const addedCosts = (alt: Alt) => alt.transport + alt.extras
 
-/**
- * Detecta lo que podría hacer parecer más barata a la alternativa equivocada.
- * Las alertas de los temas con más peso para el usuario van primero.
- */
+/** Las alertas de los temas con más peso para el usuario van primero. */
 export function detectIllusions(
   comparison: Pick<Comparison, 'a' | 'b'>,
   weights: Partial<Record<Topic, number>> = {},
@@ -77,6 +74,6 @@ export function detectIllusions(
     })
   }
 
-  // `sort` es estable: a igual peso se mantiene el orden de arriba.
+  // Orden estable: a igual peso se respeta el orden de detección.
   return found.sort((x, y) => (weights[y.topic] ?? 0) - (weights[x.topic] ?? 0))
 }

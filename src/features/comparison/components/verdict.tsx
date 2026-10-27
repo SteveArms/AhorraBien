@@ -7,7 +7,7 @@ export function Verdict({ outcome }: { outcome: ComparisonOutcome }) {
   const tie = winner === 'tie'
   return (
     <div className="mt-[18px] mb-8 grid grid-cols-[40px_1fr] items-start gap-[13px]">
-      <span className="grid size-10 place-items-center rounded-full bg-accent font-bold text-paper">
+      <span className="grid size-10 place-items-center rounded-full bg-accent-strong font-bold text-paper">
         {tie ? '=' : winner.toUpperCase()}
       </span>
       <p className="text-sm leading-normal">

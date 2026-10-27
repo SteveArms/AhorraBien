@@ -30,7 +30,6 @@ type BreakdownProps = {
   cost: number
   /** Oculta descuentos y gastos en cero (útil en ejemplos cortos). */
   hideZero?: boolean
-  /** Filas a resaltar (lo que más le cuesta al usuario). */
   highlight?: AltField[]
 }
 
@@ -73,7 +72,7 @@ export function Breakdown({ title, alt, cost, hideZero, highlight = [] }: Breakd
         {alt.cashback > 0 && (
           <div
             className={cn(
-              'flex justify-between border-t border-dashed border-line pt-[9px] text-accent',
+              'flex justify-between border-t border-dashed border-line pt-[9px] text-accent-strong',
               hl('cashback') && '-mx-2 rounded-b-lg bg-accent/10 px-2 pb-1 font-semibold',
             )}
           >

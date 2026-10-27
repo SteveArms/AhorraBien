@@ -10,7 +10,6 @@ type LessonCardProps = {
    * - `featured`: tarjeta destacada en verde (sugerencia en el resultado).
    */
   variant?: 'carousel' | 'row' | 'featured'
-  /** Muestra la insignia "Para ti" (según el onboarding del usuario). */
   recommended?: boolean
 }
 
@@ -33,7 +32,9 @@ export function LessonCard({ lesson, variant = 'carousel', recommended }: Lesson
         href={href(lesson)}
         className="grid grid-cols-[44px_1fr_auto] items-center gap-3 border-b border-line py-5"
       >
-        <span className="font-serif text-[30px] leading-none text-accent italic">{number}</span>
+        <span className="font-serif text-[30px] leading-none text-accent-strong italic">
+          {number}
+        </span>
         <div className="grid gap-1">
           {recommended && (
             <span className="justify-self-start">
@@ -54,7 +55,7 @@ export function LessonCard({ lesson, variant = 'carousel', recommended }: Lesson
         href={href(lesson)}
         className="grid gap-2 rounded-card bg-forest p-5 text-paper shadow-[0_8px_22px_#244d3b1d]"
       >
-        <small className="text-[9px] tracking-[.12em] text-accent">
+        <small className="text-[9px] tracking-[.12em] text-white/75">
           APRENDE EN {minutes} MINUTO · LECCIÓN {number}
         </small>
         <strong className="text-lg leading-tight">{card.title}</strong>
@@ -72,7 +73,9 @@ export function LessonCard({ lesson, variant = 'carousel', recommended }: Lesson
       className="flex w-[236px] shrink-0 snap-start flex-col rounded-card border border-line bg-paper p-[18px] transition-transform duration-200 active:scale-[.98] md:w-auto"
     >
       <div className="flex items-start justify-between">
-        <span className="font-serif text-[34px] leading-none text-accent italic">{number}</span>
+        <span className="font-serif text-[34px] leading-none text-accent-strong italic">
+          {number}
+        </span>
         <span className="flex gap-1.5">
           {recommended && <ForYou />}
           <span className="rounded-full bg-sage px-2 py-1 text-[10px] font-bold text-forest">

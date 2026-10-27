@@ -6,7 +6,6 @@ import { useAppStore } from '@/store/app-store'
 import { rankLessons } from '../lessons'
 import { LessonCard } from './lesson-card'
 
-/** Sección del inicio con las lecciones, primero las que más le sirven al usuario. */
 export function LessonsCarousel() {
   const goal = useAppStore((s) => s.goal)
   const difficulties = useAppStore((s) => s.difficulties)
