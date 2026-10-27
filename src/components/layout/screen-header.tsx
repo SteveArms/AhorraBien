@@ -8,10 +8,19 @@ type ScreenHeaderProps = {
   /** Alternativa a backHref cuando volver requiere lógica (p. ej. confirmar descarte). */
   onBack?: () => void
   action?: ReactNode
+  /** Úsalo en pantallas sin otro `<h1>`. */
+  titleAsHeading?: boolean
 }
 
-export function ScreenHeader({ title, backHref, onBack, action }: ScreenHeaderProps) {
+export function ScreenHeader({
+  title,
+  backHref,
+  onBack,
+  action,
+  titleAsHeading,
+}: ScreenHeaderProps) {
   const hasBack = backHref !== undefined || onBack !== undefined
+  const Title = titleAsHeading ? 'h1' : 'strong'
   return (
     <header className="grid h-12 grid-cols-[48px_1fr_48px] items-center text-center">
       {hasBack ? (
@@ -25,7 +34,7 @@ export function ScreenHeader({ title, backHref, onBack, action }: ScreenHeaderPr
       ) : (
         <span />
       )}
-      <strong className="text-sm">{title}</strong>
+      <Title className="text-sm leading-normal font-bold tracking-normal">{title}</Title>
       {action ?? <span />}
     </header>
   )

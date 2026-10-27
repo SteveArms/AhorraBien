@@ -11,8 +11,19 @@ let lastPath: string | null = null
 export function useTrackNavigation() {
   const pathname = usePathname()
   useEffect(() => {
+    const isFirstScreen = lastPath === null
     visitedScreens += 1
     lastPath = pathname
+    if (isFirstScreen) return
+    // Los lectores de pantalla no anuncian los cambios de ruta del cliente: llevamos el foco al título.
+    const frame = requestAnimationFrame(() => {
+      const target =
+        document.querySelector<HTMLElement>('main h1') ?? document.querySelector('main')
+      if (!target) return
+      target.tabIndex = -1
+      target.focus({ preventScroll: true })
+    })
+    return () => cancelAnimationFrame(frame)
   }, [pathname])
 }
 

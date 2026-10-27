@@ -19,7 +19,10 @@ export function LessonsCarousel() {
             Compra con más criterio
           </h2>
         </div>
-        <Link href="/aprender" className="pb-1 text-xs font-bold text-forest underline">
+        <Link
+          href="/aprender"
+          className="inline-flex min-h-6 items-center text-xs font-bold text-forest underline"
+        >
           Ver todas
         </Link>
       </div>

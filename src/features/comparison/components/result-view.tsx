@@ -54,6 +54,7 @@ export function ResultView() {
       <Screen className="lg:pt-4">
         <ScreenHeader title="Resultado" backHref="/comparar" />
         <EmptyState
+          heading="h1"
           title="No podemos calcular todavía"
           description="Revisa los precios y asegúrate de que los descuentos no superen el precio original."
           action={<ButtonLink href="/comparar">Revisar datos</ButtonLink>}

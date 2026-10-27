@@ -91,6 +91,10 @@
     color: var(--color-forest);
     font-weight: 500;
   }
+  /* El foco programático en títulos es para lectores de pantalla, no necesita contorno. */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
   summary::-webkit-details-marker {
     display: none;
   }

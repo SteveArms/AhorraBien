@@ -7,10 +7,20 @@ type EmptyStateProps = {
   action?: ReactNode
   /** Muestra las tres líneas decorativas sobre el título. */
   decorated?: boolean
+  /** Úsalo cuando el estado vacío es el contenido principal de la pantalla. */
+  heading?: 'h1' | 'h2'
   className?: string
 }
 
-export function EmptyState({ title, description, action, decorated, className }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  action,
+  decorated,
+  heading,
+  className,
+}: EmptyStateProps) {
+  const Title = heading ?? 'strong'
   return (
     <section
       className={cn('grid justify-items-center gap-2.5 px-3 py-[42px] text-center', className)}
@@ -22,7 +32,7 @@ export function EmptyState({ title, description, action, decorated, className }:
           <i className="absolute top-10 left-[5px] h-px w-[68px] bg-line" />
         </div>
       )}
-      <strong>{title}</strong>
+      <Title className="text-base leading-normal font-bold tracking-normal">{title}</Title>
       <p className="text-sm leading-normal text-muted">{description}</p>
       {action}
     </section>

@@ -42,7 +42,7 @@ export function AltDetailsForm({ altKey }: { altKey: AltKey }) {
 
   return (
     <Screen>
-      <ScreenHeader title={title} onBack={cancel} />
+      <ScreenHeader title={title} onBack={cancel} titleAsHeading />
 
       <section className="grid gap-[5px] border-b border-line pt-[38px] pb-[25px]">
         <span className="text-xs text-muted">Costo actualizado</span>

@@ -6,6 +6,7 @@ export default function NotFound() {
   return (
     <Screen>
       <EmptyState
+        heading="h1"
         decorated
         className="pt-[85px]"
         title="No encontramos esta página"

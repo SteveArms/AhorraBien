@@ -13,6 +13,7 @@ export default function ErrorPage({ error, retry }: { error: unknown; retry: () 
   return (
     <Screen>
       <EmptyState
+        heading="h1"
         decorated
         className="pt-[85px]"
         title="Algo salió mal"
