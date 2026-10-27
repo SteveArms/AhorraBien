@@ -1,10 +1,10 @@
-import { StorageNotice } from '@/components/layout/storage-notice'
+import { AppNotices } from '@/components/layout/app-notices'
 import { WelcomeScreen } from '@/features/onboarding/components/welcome-screen'
 
 export default function WelcomePage() {
   return (
     <>
-      <StorageNotice />
+      <AppNotices />
       <WelcomeScreen />
     </>
   )

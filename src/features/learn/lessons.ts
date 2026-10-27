@@ -179,9 +179,10 @@ export const LESSONS: Lesson[] = [
 
 export const getLesson = (slug: string) => LESSONS.find((lesson) => lesson.slug === slug)
 
-export const getNextLesson = (slug: string) => {
-  const index = LESSONS.findIndex((lesson) => lesson.slug === slug)
-  return index === -1 ? undefined : LESSONS[index + 1]
+/** `order` permite seguir el orden personalizado de `rankLessons` en vez del del curso. */
+export const getNextLesson = (slug: string, order: Lesson[] = LESSONS) => {
+  const index = order.findIndex((lesson) => lesson.slug === slug)
+  return index === -1 ? undefined : order[index + 1]
 }
 
 /** Lección más útil según los datos de una comparación. */

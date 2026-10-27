@@ -9,7 +9,7 @@ import { Screen } from '@/components/layout/screen'
 import { useBackNavigation, usePreviousPath } from '@/hooks/use-back-navigation'
 import { cn } from '@/lib/cn'
 import { useAppStore } from '@/store/app-store'
-import { LESSONS, getNextLesson, lessonToComparison, type Lesson } from '../lessons'
+import { LESSONS, getNextLesson, lessonToComparison, rankLessons, type Lesson } from '../lessons'
 import { LessonExample } from './lesson-example'
 
 const BACK_LABELS: Record<string, string> = {
@@ -25,7 +25,10 @@ export function LessonScreen({ lesson }: { lesson: Lesson }) {
   const previous = usePreviousPath()
   const backLabel = (previous && BACK_LABELS[previous]) ?? 'Volver'
   const loadDraft = useAppStore((s) => s.loadDraft)
-  const next = getNextLesson(lesson.slug)
+  const goal = useAppStore((s) => s.goal)
+  const difficulties = useAppStore((s) => s.difficulties)
+  const order = rankLessons({ goal, difficulties }).map((r) => r.lesson)
+  const next = getNextLesson(lesson.slug, order)
   // Se busca por slug: `lesson` llega serializado desde el server component.
   const position = LESSONS.findIndex((l) => l.slug === lesson.slug) + 1
 

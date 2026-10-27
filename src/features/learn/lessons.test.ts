@@ -48,6 +48,9 @@ describe('LESSONS', () => {
   it('getNextLesson devuelve la siguiente o undefined al final', () => {
     expect(getNextLesson(LESSONS[0].slug)).toBe(LESSONS[1])
     expect(getNextLesson(LESSONS.at(-1)!.slug)).toBeUndefined()
+    const personal = [LESSONS[3], LESSONS[1], LESSONS[0], LESSONS[2]]
+    expect(getNextLesson(LESSONS[3].slug, personal)).toBe(LESSONS[1])
+    expect(getNextLesson(LESSONS[2].slug, personal)).toBeUndefined()
   })
 })
 

@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useId, useRef } from 'react'
+import { useId } from 'react'
 import { createPortal } from 'react-dom'
+import { useModal } from '@/hooks/use-modal'
 import { Button } from './button'
 import { Icon, type IconName } from './icon'
 
@@ -54,32 +55,8 @@ type ConfirmDialogProps = {
  * porque la animación de entrada crea un contexto de apilamiento.
  */
 export function ConfirmDialog({ preset, open, onCancel, onConfirm }: ConfirmDialogProps) {
-  const overlayRef = useRef<HTMLDivElement>(null)
-  const onCancelRef = useRef(onCancel)
+  const overlayRef = useModal(open, onCancel)
   const id = useId()
-
-  useEffect(() => {
-    onCancelRef.current = onCancel
-  })
-
-  // Fondo inerte y foco en Cancelar; al cerrar, el foco vuelve a quien lo abrió.
-  useEffect(() => {
-    if (!open) return
-    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    const background = [...document.body.children].filter(
-      (el): el is HTMLElement =>
-        el instanceof HTMLElement && el !== overlayRef.current && !el.inert,
-    )
-    background.forEach((el) => (el.inert = true))
-    overlayRef.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onCancelRef.current()
-    window.addEventListener('keydown', onKey)
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      background.forEach((el) => (el.inert = false))
-      trigger?.focus()
-    }
-  }, [open])
 
   if (!open) return null
   const { icon, title, description, cancelLabel, confirmLabel } = CONFIRM_PRESETS[preset]

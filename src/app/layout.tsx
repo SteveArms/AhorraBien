@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Newsreader } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { AppFrame } from '@/components/layout/app-frame'
+import { ConnectionGuard } from '@/components/layout/connection-guard'
 import { NavigationTracker } from '@/components/layout/navigation-tracker'
 import { StoreHydrator } from '@/components/layout/store-hydrator'
 import { Toast } from '@/components/ui/toast'
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AppFrame>
           {children}
           <Toast />
+          <ConnectionGuard />
         </AppFrame>
       </body>
     </html>

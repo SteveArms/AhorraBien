@@ -31,14 +31,32 @@ type BreakdownProps = {
   /** Oculta descuentos y gastos en cero (útil en ejemplos cortos). */
   hideZero?: boolean
   highlight?: AltField[]
+  /** Ancla para enlazar al desglose desde la recomendación. */
+  id?: string
+  emphasized?: boolean
 }
 
 /** Desglose de cómo se llegó al costo de una alternativa. */
-export function Breakdown({ title, alt, cost, hideZero, highlight = [] }: BreakdownProps) {
+export function Breakdown({
+  title,
+  alt,
+  cost,
+  hideZero,
+  highlight = [],
+  id,
+  emphasized,
+}: BreakdownProps) {
   const show = (value: number) => !hideZero || value > 0
   const hl = (field: AltField) => highlight.includes(field)
   return (
-    <div className="border-b border-line py-5">
+    <div
+      id={id}
+      tabIndex={id ? -1 : undefined}
+      className={cn(
+        'rounded-[4px] border-b border-line py-5 transition-[background-color,box-shadow] duration-700',
+        emphasized && 'bg-sage shadow-[0_0_0_12px_var(--color-sage)]',
+      )}
+    >
       <div className="flex justify-between">
         <strong>{title}</strong>
         <span className="font-bold text-forest">{money(cost)}</span>

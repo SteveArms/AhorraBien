@@ -67,33 +67,36 @@ Grupos de rutas:
 
 ### ¿Dónde está…?
 
-| Necesito…                                     | Archivo                                                                                                   |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Cálculo de costo / ganador / diferencia       | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)                  |
-| Datos de ejemplo, borrador inicial            | `src/features/comparison/lib/factories.ts`                                                                |
-| ¿Es un ejemplo? (etiqueta, historial, ahorro) | `isIllustrative` en `src/features/comparison/lib/illustrative.ts` (producto y montos, no basta el nombre) |
-| Reglas de validación y mensajes de error      | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`)             |
-| Qué se guarda en `localStorage`               | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`                        |
-| Estado global y acciones                      | `src/store/app-store.ts` (`useAppStore`)                                                                  |
-| Valores derivados del estado                  | `src/store/selectors.ts`                                                                                  |
-| Errores por campo para formularios            | `src/hooks/use-alt-validation.ts`                                                                         |
-| Confirmar antes de salir con cambios          | `src/hooks/use-guarded-navigation.ts`                                                                     |
-| Textos de los diálogos de confirmación        | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                               |
-| Contenido de las lecciones, lección sugerida  | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                              |
-| Volver atrás con ruta de respaldo             | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                                  |
-| Opciones del onboarding                       | `src/features/onboarding/constants.ts`                                                                    |
-| Dificultades/objetivo → temas, pesos, filas   | `src/features/personalization/topics.ts` (`topicWeights`, `highlightedFields`)                            |
-| Detector de ilusiones (alertas del resultado) | `src/features/comparison/lib/detect-illusions.ts` + `components/illusion-alerts.tsx`                      |
-| Lecciones ordenadas para el usuario           | `rankLessons` en `src/features/learn/lessons.ts`                                                          |
-| Colores, radios, fuentes, animaciones         | `@theme` en `src/app/globals.css`                                                                         |
-| Íconos SVG                                    | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                             |
-| Formato de soles y fechas                     | `src/lib/format.ts`                                                                                       |
+| Necesito…                                         | Archivo                                                                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Cálculo de costo / ganador / diferencia           | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)                         |
+| Datos de ejemplo, borrador inicial                | `src/features/comparison/lib/factories.ts`                                                                       |
+| ¿Es un ejemplo? (etiqueta, historial, ahorro)     | `isIllustrative` en `src/features/comparison/lib/illustrative.ts` (producto y montos, no basta el nombre)        |
+| «Tu siguiente paso» del resultado                 | `nextSteps` en `src/features/comparison/lib/next-steps.ts`                                                       |
+| Sin conexión (precarga, franja y pantalla propia) | `src/components/layout/connection-guard.tsx`, `offline-screen.tsx`, `app-notices.tsx`, `src/hooks/use-online.ts` |
+| Modal accesible (foco, inert, Escape)             | `src/hooks/use-modal.ts` (lo usan `ConfirmDialog` y `OfflineScreen`)                                             |
+| Reglas de validación y mensajes de error          | `src/schemas/comparison.schema.ts` (`MESSAGES`, `altSchema`, `productSchema`, `altKeySchema`)                    |
+| Qué se guarda en `localStorage`                   | `src/schemas/persisted-state.schema.ts` + `partialize` en `src/store/app-store.ts`                               |
+| Estado global y acciones                          | `src/store/app-store.ts` (`useAppStore`)                                                                         |
+| Valores derivados del estado                      | `src/store/selectors.ts`                                                                                         |
+| Errores por campo para formularios                | `src/hooks/use-alt-validation.ts`                                                                                |
+| Confirmar antes de salir con cambios              | `src/hooks/use-guarded-navigation.ts`                                                                            |
+| Textos de los diálogos de confirmación            | `CONFIRM_PRESETS` en `src/components/ui/confirm-dialog.tsx`                                                      |
+| Contenido de las lecciones, lección sugerida      | `src/features/learn/lessons.ts` (`LESSONS`, `suggestLesson`)                                                     |
+| Volver atrás con ruta de respaldo                 | `src/hooks/use-back-navigation.ts` (`useBackNavigation`)                                                         |
+| Opciones del onboarding                           | `src/features/onboarding/constants.ts`                                                                           |
+| Dificultades/objetivo → temas, pesos, filas       | `src/features/personalization/topics.ts` (`topicWeights`, `highlightedFields`)                                   |
+| Detector de ilusiones (alertas del resultado)     | `src/features/comparison/lib/detect-illusions.ts` + `components/illusion-alerts.tsx`                             |
+| Lecciones ordenadas para el usuario               | `rankLessons` en `src/features/learn/lessons.ts`                                                                 |
+| Colores, radios, fuentes, animaciones             | `@theme` en `src/app/globals.css`                                                                                |
+| Íconos SVG                                        | `src/components/ui/icon.tsx` (agrega el path al mapa `paths`)                                                    |
+| Formato de soles y fechas                         | `src/lib/format.ts`                                                                                              |
 
 ## Estado (Zustand)
 
 - `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición), `dirty` y `toast`.
 - Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` y `dirty` se guardan por pestaña en `sessionStorage` (`src/store/draft-session.ts`, clave `ahorrabien:borrador`) y se restauran dentro de `merge`, junto al resto del estado: así una recarga no lo pierde y no se sobrescribe `localStorage` antes de leerlo.
-- La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran. El almacenamiento pasa por `createSafeStorage` (`src/store/safe-storage.ts`): JSON dañado → se descarta y `storageStatus` vale `'reset'` (aviso); sin `localStorage` → memoria y `'unavailable'` (franja `StorageNotice`).
+- La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran. El almacenamiento pasa por `createSafeStorage` (`src/store/safe-storage.ts`): JSON dañado → se descarta y `storageStatus` vale `'reset'` (aviso); sin `localStorage` → memoria y `'unavailable'` (franja `AppNotices`).
 - Lee con selectores finos: `useAppStore((s) => s.saved)`, no `useAppStore()` entero.
 - Nunca uses `localStorage` directamente: pasa por el store.
 - `flash(mensaje, tono?)` muestra un toast global (`'success'` por defecto, `'info'` para avisos).

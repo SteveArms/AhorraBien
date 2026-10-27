@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, ButtonLink } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -13,15 +13,17 @@ import { useComparisonResult } from '@/hooks/use-comparison-result'
 import { money } from '@/lib/format'
 import { useAppStore } from '@/store/app-store'
 import { selectIsDraftSaved } from '@/store/selectors'
-import type { AltField } from '@/types'
+import type { AltField, AltKey } from '@/types'
 import { LessonCard } from '@/features/learn/components/lesson-card'
 import { suggestLesson } from '@/features/learn/lessons'
 import { highlightedFields, topicWeights } from '@/features/personalization/topics'
 import { detectIllusions } from '../lib/detect-illusions'
 import { isIllustrative } from '../lib/illustrative'
+import { nextSteps } from '../lib/next-steps'
 import { Breakdown } from './breakdown'
 import { CostBlock } from './cost-block'
 import { IllusionAlerts } from './illusion-alerts'
+import { NextSteps } from './next-steps'
 import { Verdict } from './verdict'
 
 const FIELD_LABELS: Record<AltField, string> = {
@@ -48,6 +50,21 @@ export function ResultView() {
   const difficulties = useAppStore((s) => s.difficulties)
   const { outcome } = useComparisonResult(draft)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [emphasized, setEmphasized] = useState<AltKey | null>(null)
+  const emphasisTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => () => clearTimeout(emphasisTimer.current), [])
+
+  const explainWinner = (key: AltKey) => {
+    const target = document.getElementById(`desglose-${key}`)
+    if (!target) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
+    target.focus({ preventScroll: true })
+    setEmphasized(key)
+    clearTimeout(emphasisTimer.current)
+    emphasisTimer.current = setTimeout(() => setEmphasized(null), 1600)
+  }
 
   if (!outcome) {
     return (
@@ -93,7 +110,10 @@ export function ResultView() {
             <CostBlock label="Alternativa A" cost={aCost} winner={winner === 'a'} />
             <CostBlock label="Alternativa B" cost={bCost} winner={winner === 'b'} />
           </div>
-          <Verdict outcome={outcome} />
+          <Verdict
+            outcome={outcome}
+            onExplain={winner === 'tie' ? undefined : () => explainWinner(winner)}
+          />
           <IllusionAlerts illusions={illusions} difficulties={difficulties} />
         </section>
 
@@ -109,9 +129,25 @@ export function ResultView() {
                 porque marcaste que te cuesta calcularlo.
               </p>
             )}
-            <Breakdown title="Alternativa A" alt={draft.a} cost={aCost} highlight={highlight} />
-            <Breakdown title="Alternativa B" alt={draft.b} cost={bCost} highlight={highlight} />
+            <Breakdown
+              id="desglose-a"
+              emphasized={emphasized === 'a'}
+              title="Alternativa A"
+              alt={draft.a}
+              cost={aCost}
+              highlight={highlight}
+            />
+            <Breakdown
+              id="desglose-b"
+              emphasized={emphasized === 'b'}
+              title="Alternativa B"
+              alt={draft.b}
+              cost={bCost}
+              highlight={highlight}
+            />
           </section>
+
+          <NextSteps steps={nextSteps(draft)} />
 
           <section className="pt-7">
             <LessonCard lesson={lesson} variant="featured" />

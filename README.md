@@ -64,7 +64,7 @@ Todo funciona en tu dispositivo: no hay cuentas, servidores ni datos bancarios.
 | Demo guiada           | «Tu plan» resume qué haremos según tus respuestas y propone un ejemplo de lección adaptado a tu dificultad principal, que puedes probar en el comparador real. Sin respuestas, muestra un ejemplo genérico.            |
 | Comparación A vs B    | Nombre del producto y precio de cada alternativa, con validación en tiempo real y mensajes de error accesibles.                                                                                                        |
 | Detalles opcionales   | Descuento inmediato, beneficio de pago, transporte, otros gastos y cashback referencial.                                                                                                                               |
-| Resultado             | Alternativa ganadora, diferencia en soles, recomendación, desglose de cada costo y estado «Guardada en tu historial» tras guardar.                                                                                     |
+| Resultado             | Alternativa ganadora, diferencia en soles, recomendación, desglose de cada costo, «Tu siguiente paso» según tus datos y estado «Guardada en tu historial» tras guardar.                                                |
 | Historial             | Comparaciones guardadas con fecha, resultado y diferencia; los ejemplos se marcan como «Ejemplo». Se pueden abrir o eliminar.                                                                                          |
 | Inicio                | Carrusel de lecciones, última comparación y ahorro potencial acumulado (solo de tus comparaciones, sin contar ejemplos).                                                                                               |
 | Aprendizaje           | 4 lecciones (descuentos, transporte, cashback y gastos extra). Cada una muestra lo que parece, lo que realmente pasa, un ejemplo resuelto, la idea clave y cómo aplicarla; el ejemplo se puede abrir en el comparador. |
@@ -249,6 +249,7 @@ flowchart LR
 - **Esquemas como fuente de verdad:** las reglas de validación y los tipos de TypeScript se derivan de Zod.
 - **Lógica pura y probada:** el cálculo de costos no depende de React y tiene pruebas unitarias.
 - **Persistencia segura:** los datos guardados se validan al cargar. Si están dañados se descartan con un aviso; si el navegador bloquea el almacenamiento, la app funciona en memoria y muestra una franja explicándolo. Los errores inesperados muestran una pantalla en español con «Reintentar» y «Volver al inicio».
+- **Sin conexión:** al abrir la app se precargan todas las pantallas, así que se puede seguir navegando si se cae la red; una franja lo indica y, si una pantalla no estuviera disponible, se muestra una pantalla propia con «Reintentar» e «Ir al inicio». Límite: recargar la página sin conexión muestra el error del navegador, porque la app no usa _service worker_.
 - **Componentes por dominio:** cada carpeta de `features/` reúne sus pantallas, y las piezas reutilizables viven en `components/`.
 
 Para convenciones de código, recetas (agregar pantallas o campos) y un mapa detallado de archivos, consulta **[AGENTS.md](AGENTS.md)**.
