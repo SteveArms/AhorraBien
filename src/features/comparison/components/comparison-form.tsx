@@ -13,7 +13,7 @@ import { Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useAltValidation } from '@/hooks/use-alt-validation'
 import { useGuardedNavigation } from '@/hooks/use-guarded-navigation'
-import { productSchema, ALT_KEYS } from '@/schemas/comparison.schema'
+import { ALT_KEYS, MESSAGES, productSchema } from '@/schemas/comparison.schema'
 import { useAppStore } from '@/store/app-store'
 
 /** Paso 1: nombre del producto y precio de cada alternativa (/comparar). */
@@ -26,8 +26,8 @@ export function ComparisonForm() {
   const errorsB = useAltValidation(draft.b)
   const { navigate, discardDialog } = useGuardedNavigation()
 
-  const canCompare =
-    productSchema.safeParse(draft.product).success && !errorsA.price && !errorsB.price
+  const productError = productSchema.safeParse(draft.product).success ? undefined : MESSAGES.product
+  const canCompare = !productError && !errorsA.price && !errorsB.price
 
   return (
     <Screen className="lg:max-w-[1040px] lg:pt-4">
@@ -52,6 +52,7 @@ export function ComparisonForm() {
               value={draft.product}
               onChange={(e) => setProduct(e.target.value)}
               placeholder="Ej. Auriculares inalámbricos"
+              error={productError}
             />
           </section>
 

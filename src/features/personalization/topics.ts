@@ -2,6 +2,10 @@ import type { AltField, Preferences } from '@/types'
 
 export type Topic = 'discount' | 'transport' | 'extras' | 'payment'
 
+const TOPICS: Topic[] = ['discount', 'transport', 'extras', 'payment']
+
+export const LEARNING_GOAL = 'Aprender a comparar precios'
+
 // Claves: textos de DIFFICULTIES en onboarding/constants.ts.
 const DIFFICULTY_TOPICS: Record<string, Topic[]> = {
   'Comparar precios entre tiendas': ['transport'],
@@ -14,7 +18,7 @@ const DIFFICULTY_TOPICS: Record<string, Topic[]> = {
 const GOAL_TOPICS: Record<string, Topic[]> = {
   'Gastar menos en mis compras': ['extras'],
   'Aprovechar mejor los descuentos': ['discount'],
-  'Aprender a comparar precios': [],
+  [LEARNING_GOAL]: TOPICS,
 }
 
 export const TOPIC_FIELDS: Record<Topic, AltField[]> = {
@@ -33,6 +37,21 @@ export function topicWeights({ goal, difficulties }: Preferences): Partial<Recor
   for (const difficulty of difficulties) add(DIFFICULTY_TOPICS[difficulty], 2)
   add(GOAL_TOPICS[goal], 1)
   return weights
+}
+
+/** Temas con peso para el usuario, del más al menos importante. */
+export function rankTopics(preferences: Preferences): Topic[] {
+  const weights = topicWeights(preferences)
+  return TOPICS.filter((topic) => weights[topic]).sort(
+    (x, y) => (weights[y] ?? 0) - (weights[x] ?? 0),
+  )
+}
+
+export const TOPIC_PROMISES: Record<Topic, string> = {
+  discount: 'Te avisaremos si el mayor descuento no es la compra más barata.',
+  transport: 'Revisaremos si el transporte se come lo que ahorras.',
+  extras: 'Sumaremos comisiones, envío y otros gastos al costo real.',
+  payment: 'Separaremos el cashback de lo que pagas hoy.',
 }
 
 export function difficultyFor(topic: Topic, difficulties: string[]) {

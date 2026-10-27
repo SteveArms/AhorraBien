@@ -6,6 +6,7 @@ import { Button, ButtonLink } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Eyebrow } from '@/components/ui/eyebrow'
+import { Icon } from '@/components/ui/icon'
 import { Screen } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
 import { useComparisonResult } from '@/hooks/use-comparison-result'
@@ -14,7 +15,7 @@ import { useAppStore } from '@/store/app-store'
 import { selectIsDraftSaved } from '@/store/selectors'
 import type { AltField } from '@/types'
 import { LessonCard } from '@/features/learn/components/lesson-card'
-import { suggestLesson } from '@/features/learn/lessons'
+import { isLessonExample, suggestLesson } from '@/features/learn/lessons'
 import { highlightedFields, topicWeights } from '@/features/personalization/topics'
 import { detectIllusions } from '../lib/detect-illusions'
 import { isExampleComparison } from '../lib/factories'
@@ -42,6 +43,7 @@ export function ResultView() {
   const startNew = useAppStore((s) => s.startNew)
   const removeCurrent = useAppStore((s) => s.removeCurrent)
   const flash = useAppStore((s) => s.flash)
+  const dirty = useAppStore((s) => s.dirty)
   const goal = useAppStore((s) => s.goal)
   const difficulties = useAppStore((s) => s.difficulties)
   const { outcome } = useComparisonResult(draft)
@@ -71,7 +73,7 @@ export function ResultView() {
 
       <div className="xl:grid xl:grid-cols-2 xl:items-start xl:gap-14">
         <section className="pt-6 xl:sticky xl:top-20">
-          {isExampleComparison(draft) && (
+          {(isExampleComparison(draft) || isLessonExample(draft)) && (
             <div className="mb-5 inline-block rounded-full border border-accent-strong px-[9px] py-1.5 text-[9px] tracking-[.1em] text-accent-strong">
               DATOS ILUSTRATIVOS
             </div>
@@ -115,7 +117,16 @@ export function ResultView() {
           </section>
 
           <div className="grid gap-2.5 pt-[25px]">
-            <Button onClick={save}>Guardar comparación</Button>
+            {isSaved && !dirty ? (
+              <p
+                role="status"
+                className="flex min-h-[54px] items-center justify-center gap-2 rounded-ctl bg-sage font-bold text-forest"
+              >
+                <Icon name="check" /> Guardada en tu historial
+              </p>
+            ) : (
+              <Button onClick={save}>{isSaved ? 'Guardar cambios' : 'Guardar comparación'}</Button>
+            )}
             <ButtonLink href="/comparar" variant="secondary">
               Editar comparación
             </ButtonLink>

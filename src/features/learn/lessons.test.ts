@@ -5,6 +5,7 @@ import { comparisonSchema } from '@/schemas/comparison.schema'
 import {
   LESSONS,
   getNextLesson,
+  isLessonExample,
   lessonForTopic,
   lessonToComparison,
   rankLessons,
@@ -72,6 +73,14 @@ describe('rankLessons', () => {
     for (const topic of ['discount', 'transport', 'extras', 'payment'] as const) {
       expect(lessonForTopic(topic)?.topic).toBe(topic)
     }
+  })
+})
+
+describe('isLessonExample', () => {
+  it('reconoce el ejemplo intacto, pero no un producto propio con el mismo nombre', () => {
+    const example = lessonToComparison(LESSONS[1])
+    expect(isLessonExample(example)).toBe(true)
+    expect(isLessonExample({ ...example, a: { ...example.a, price: 50 } })).toBe(false)
   })
 })
 

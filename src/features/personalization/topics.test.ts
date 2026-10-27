@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DIFFICULTIES, GOALS } from '@/features/onboarding/constants'
-import { difficultyFor, highlightedFields, topicWeights } from './topics'
+import { LEARNING_GOAL, difficultyFor, highlightedFields, rankTopics, topicWeights } from './topics'
 
 describe('topics', () => {
   it('cada dificultad suma 2 y el objetivo suma 1', () => {
@@ -25,6 +25,25 @@ describe('topics', () => {
     for (const goal of GOALS) {
       expect(() => topicWeights({ goal, difficulties: [] })).not.toThrow()
     }
+  })
+
+  it('el objetivo de aprender da peso a todos los temas', () => {
+    expect(rankTopics({ goal: LEARNING_GOAL, difficulties: [] })).toEqual([
+      'discount',
+      'transport',
+      'extras',
+      'payment',
+    ])
+  })
+
+  it('ordena los temas por peso y omite los que no importan', () => {
+    expect(
+      rankTopics({
+        goal: 'Gastar menos en mis compras',
+        difficulties: ['Entender los beneficios de pago'],
+      }),
+    ).toEqual(['payment', 'extras'])
+    expect(rankTopics({ goal: '', difficulties: [] })).toEqual([])
   })
 
   it('resalta los campos del desglose según las dificultades', () => {
