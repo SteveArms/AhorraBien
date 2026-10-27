@@ -70,7 +70,7 @@ Grupos de rutas:
 | Necesito…                                         | Archivo                                                                                                          |
 | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | Cálculo de costo / ganador / diferencia           | `src/features/comparison/lib/calculate-cost.ts` (`calculateCost`, `compareAlternatives`)                         |
-| Datos de ejemplo, borrador inicial                | `src/features/comparison/lib/factories.ts`                                                                       |
+| Datos de ejemplo, borrador inicial (vacío)        | `src/features/comparison/lib/factories.ts`                                                                       |
 | ¿Es un ejemplo? (etiqueta, historial, ahorro)     | `isIllustrative` en `src/features/comparison/lib/illustrative.ts` (producto y montos, no basta el nombre)        |
 | «Tu siguiente paso» del resultado                 | `nextSteps` en `src/features/comparison/lib/next-steps.ts`                                                       |
 | Sin conexión (precarga, franja y pantalla propia) | `src/components/layout/connection-guard.tsx`, `offline-screen.tsx`, `app-notices.tsx`, `src/hooks/use-online.ts` |
@@ -94,12 +94,13 @@ Grupos de rutas:
 
 ## Estado (Zustand)
 
-- `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición), `dirty` y `toast`.
-- Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft` y `dirty` se guardan por pestaña en `sessionStorage` (`src/store/draft-session.ts`, clave `ahorrabien:borrador`) y se restauran dentro de `merge`, junto al resto del estado: así una recarga no lo pierde y no se sobrescribe `localStorage` antes de leerlo.
+- `useAppStore` guarda `goal`, `difficulties`, `saved` (historial), `draft` (comparación en edición; empieza vacío), `dirty`, `trial` (el borrador viene de la demo: el comparador muestra «Paso 4 de 4» del onboarding hasta guardar o empezar otra) y `toast`.
+- Solo `goal`, `difficulties` y `saved` se persisten (clave `ahorrabien:v1`). El `draft`, `dirty` y `trial` se guardan por pestaña en `sessionStorage` (`src/store/draft-session.ts`, clave `ahorrabien:borrador`) y se restauran dentro de `merge`, junto al resto del estado: así una recarga no lo pierde y no se sobrescribe `localStorage` antes de leerlo.
 - La hidratación es manual (`skipHydration`): la dispara `StoreHydrator` en el cliente. Los datos guardados se validan con `persistedStateSchema`; si son inválidos se ignoran. El almacenamiento pasa por `createSafeStorage` (`src/store/safe-storage.ts`): JSON dañado → se descarta y `storageStatus` vale `'reset'` (aviso); sin `localStorage` → memoria y `'unavailable'` (franja `AppNotices`).
 - Lee con selectores finos: `useAppStore((s) => s.saved)`, no `useAppStore()` entero.
 - Nunca uses `localStorage` directamente: pasa por el store.
 - `flash(mensaje, tono?)` muestra un toast global (`'success'` por defecto, `'info'` para avisos).
+- **Formularios**: el botón de enviar nunca se deshabilita. Valida al enviar (`<form noValidate onSubmit>`), muestra los errores y lleva el foco al primer campo con `aria-invalid`.
 - Errores de renderizado: `src/app/error.tsx` (dentro del layout) y `src/app/global-error.tsx` (si falla el layout raíz). En Next 16 reciben `retry`, no `reset`.
 
 ## Convenciones

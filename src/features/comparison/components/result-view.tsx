@@ -73,7 +73,7 @@ export function ResultView() {
         <EmptyState
           heading="h1"
           title="No podemos calcular todavía"
-          description="Revisa los precios y asegúrate de que los descuentos no superen el precio original."
+          description="Completa el producto y el precio de cada alternativa, y revisa que los descuentos no superen el precio."
           action={<ButtonLink href="/comparar">Revisar datos</ButtonLink>}
         />
       </Screen>

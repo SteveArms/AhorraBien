@@ -7,6 +7,7 @@ import { Mark } from '@/components/ui/mark'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { Screen } from '@/components/layout/screen'
 import { useAppStore } from '@/store/app-store'
+import { SampleResult } from './sample-result'
 
 export function WelcomeScreen() {
   const router = useRouter()
@@ -14,32 +15,41 @@ export function WelcomeScreen() {
   const returning = useAppStore((s) => s.goal !== '' || s.saved.length > 0)
 
   return (
-    <Screen size="wide" className="flex flex-col pb-[26px] lg:pb-10">
+    // Arriba, entre el logo y el contenido, y a los lados: el mismo espacio (22px; 40px desde md).
+    <Screen
+      size="wide"
+      className="flex flex-col pt-[max(22px,env(safe-area-inset-top))] pb-[26px] md:pt-10 lg:pb-10"
+    >
+      {/* La fila mide lo que el logo: la etiqueta va en horizontal y solo donde cabe a su lado. */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 text-lg font-bold">
           <Mark />
           <span>AhorraBien</span>
         </div>
-        <span className="text-[9px] tracking-[.16em] text-muted [writing-mode:vertical-rl]">
+        <span className="text-[11px] tracking-[.16em] whitespace-nowrap text-muted max-md:hidden">
           EDICIÓN PERSONAL · S/
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-16">
-        <div
-          aria-hidden="true"
-          className="relative -mx-[22px] mt-[22px] mb-3 flex h-[270px] items-center justify-center overflow-hidden border-y border-line md:mx-0 md:rounded-sheet md:border-x lg:my-0 lg:h-[440px] short:h-[200px] short:lg:h-[360px]"
-        >
-          <span className="-translate-x-2 font-serif text-[180px] leading-none tracking-[-.15em] text-forest italic">
-            A
-          </span>
-          <span className="-translate-x-5 font-serif text-[180px] leading-none tracking-[-.15em] text-transparent italic [-webkit-text-stroke:1px_var(--color-accent)]">
-            B
-          </span>
-          <div className="absolute inset-x-[35px] inset-y-[38px] rounded-full border border-line">
-            <i className="absolute top-1/2 -left-[5px] size-[9px] rounded-full bg-accent" />
-            <i className="absolute top-1/2 -right-[5px] size-[9px] rounded-full bg-forest" />
+      <div className="mt-[22px] flex flex-1 flex-col md:mt-10 lg:grid lg:flex-none lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div className="relative -mx-[22px] mb-3 h-[270px] overflow-hidden border-y border-line md:mx-0 md:rounded-sheet md:border-x lg:my-0 lg:h-[440px] short:h-[200px] short:lg:h-[360px]">
+          <div
+            aria-hidden="true"
+            className="flex h-full items-center justify-center lg:items-start lg:pt-10"
+          >
+            <span className="-translate-x-2 font-serif text-[180px] leading-none tracking-[-.15em] text-forest italic max-lg:hidden short:lg:hidden">
+              A
+            </span>
+            <span className="-translate-x-5 font-serif text-[180px] leading-none tracking-[-.15em] text-transparent italic [-webkit-text-stroke:1px_var(--color-accent)] max-lg:hidden short:lg:hidden">
+              B
+            </span>
+            <div className="absolute inset-x-[35px] inset-y-[38px] rounded-full border border-line">
+              <i className="absolute top-1/2 -left-[5px] size-[9px] rounded-full bg-accent" />
+              <i className="absolute top-1/2 -right-[5px] size-[9px] rounded-full bg-forest" />
+            </div>
           </div>
+          {/* En pantallas angostas o bajas el ejemplo ocupa el centro; si no, comparte espacio con las letras. */}
+          <SampleResult className="absolute inset-x-[22px] top-1/2 mx-auto max-w-[300px] -translate-y-1/2 lg:top-auto lg:bottom-8 lg:translate-y-0 short:lg:top-1/2 short:lg:bottom-auto short:lg:-translate-y-1/2" />
         </div>
 
         <div className="flex flex-1 flex-col lg:flex-none">

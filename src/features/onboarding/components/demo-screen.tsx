@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/icon'
 import { Progress } from '@/components/ui/progress'
 import { Screen, StickyActions } from '@/components/layout/screen'
 import { ScreenHeader } from '@/components/layout/screen-header'
+import { exampleComparison } from '@/features/comparison/lib/factories'
 import { lessonForTopic, lessonToComparison } from '@/features/learn/lessons'
 import { LEARNING_GOAL, TOPIC_PROMISES, rankTopics } from '@/features/personalization/topics'
 import { money } from '@/lib/format'
@@ -36,14 +37,12 @@ export function DemoScreen() {
   const router = useRouter()
   const goal = useAppStore((s) => s.goal)
   const difficulties = useAppStore((s) => s.difficulties)
-  const loadExample = useAppStore((s) => s.loadExample)
-  const loadDraft = useAppStore((s) => s.loadDraft)
+  const startTrial = useAppStore((s) => s.startTrial)
   const topics = rankTopics({ goal, difficulties })
   const lesson = topics.length ? lessonForTopic(topics[0]) : undefined
 
   const tryIt = () => {
-    if (lesson) loadDraft(lessonToComparison(lesson))
-    else loadExample()
+    startTrial(lesson ? lessonToComparison(lesson) : exampleComparison())
     router.push('/comparar')
   }
 

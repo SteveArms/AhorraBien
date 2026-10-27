@@ -25,4 +25,6 @@ export const draftSessionSchema = z.object({
     b: draftAlt,
   }),
   dirty: z.boolean(),
+  // Ausente en borradores guardados antes de existir el campo.
+  trial: z.boolean().default(false),
 })

@@ -4,7 +4,7 @@ import { createSafeStorage, webStorage } from './safe-storage'
 
 export const DRAFT_KEY = 'ahorrabien:borrador'
 
-type DraftSession = { draft: Comparison; dirty: boolean }
+type DraftSession = { draft: Comparison; dirty: boolean; trial: boolean }
 
 const { storage } = createSafeStorage<DraftSession>(() => webStorage(() => window.sessionStorage))
 

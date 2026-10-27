@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import { exampleComparison } from '@/features/comparison/lib/factories'
 import { STORAGE_KEY, useAppStore } from './app-store'
 import { selectIsDraftSaved, selectTotalSavings } from './selectors'
 
@@ -57,6 +58,27 @@ describe('app store', () => {
 
     useAppStore.getState().removeCurrent()
     expect(useAppStore.getState().saved).toHaveLength(0)
+  })
+
+  it('empieza cada comparación nueva vacía, sin montos inventados', () => {
+    useAppStore.getState().startNew()
+    const { draft } = useAppStore.getState()
+    expect(draft.product).toBe('')
+    expect(draft.a.price).toBeNaN()
+    expect(draft.b.price).toBeNaN()
+  })
+
+  it('marca el borrador de la demo como recorrido inicial hasta guardarlo', () => {
+    const { startTrial, save, startNew } = useAppStore.getState()
+    startTrial(exampleComparison())
+    expect(useAppStore.getState()).toMatchObject({ trial: true, dirty: false })
+
+    save()
+    expect(useAppStore.getState().trial).toBe(false)
+
+    startTrial(exampleComparison())
+    startNew()
+    expect(useAppStore.getState().trial).toBe(false)
   })
 
   it('alterna dificultades', () => {

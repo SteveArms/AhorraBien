@@ -18,7 +18,7 @@ export function TextField({ label, error, ...props }: TextFieldProps) {
         {...props}
       />
       {error && (
-        <small id={errorId} className="text-[10px] leading-tight text-danger">
+        <small id={errorId} className="text-xs leading-snug text-danger">
           {error}
         </small>
       )}

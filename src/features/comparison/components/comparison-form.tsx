@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { Eyebrow } from '@/components/ui/eyebrow'
@@ -15,19 +16,43 @@ import { useAltValidation } from '@/hooks/use-alt-validation'
 import { useGuardedNavigation } from '@/hooks/use-guarded-navigation'
 import { ALT_KEYS, MESSAGES, productSchema } from '@/schemas/comparison.schema'
 import { useAppStore } from '@/store/app-store'
+import { isIllustrative } from '../lib/illustrative'
+
+type Field = 'product' | 'a' | 'b'
 
 /** Paso 1: nombre del producto y precio de cada alternativa (/comparar). */
 export function ComparisonForm() {
   const router = useRouter()
   const draft = useAppStore((s) => s.draft)
+  const trial = useAppStore((s) => s.trial)
   const setProduct = useAppStore((s) => s.setProduct)
   const setAltField = useAppStore((s) => s.setAltField)
   const errorsA = useAltValidation(draft.a)
   const errorsB = useAltValidation(draft.b)
   const { navigate, discardDialog } = useGuardedNavigation()
+  // Se fija al entrar: el texto no debe cambiar mientras la persona escribe.
+  const [fromExample] = useState(() => isIllustrative(draft))
 
   const productError = productSchema.safeParse(draft.product).success ? undefined : MESSAGES.product
   const canCompare = !productError && !errorsA.price && !errorsB.price
+
+  // Un campo muestra su error al dejarlo o al intentar comparar, no mientras se llena por primera vez.
+  const [touched, setTouched] = useState<ReadonlySet<Field>>(new Set())
+  const [submitted, setSubmitted] = useState(false)
+  const touch = (field: Field) => setTouched((prev) => new Set(prev).add(field))
+  const shown = (field: Field, error?: string) =>
+    submitted || touched.has(field) ? error : undefined
+
+  const compare = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (canCompare) {
+      router.push('/resultado')
+      return
+    }
+    setSubmitted(true)
+    const form = event.currentTarget
+    requestAnimationFrame(() => form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+  }
 
   return (
     <Screen className="lg:max-w-[1040px] lg:pt-4">
@@ -36,23 +61,33 @@ export function ComparisonForm() {
       <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14 lg:pt-4">
         <section className="pt-3 pb-5 lg:p-0">
           <div className="flex items-center gap-3">
-            <Eyebrow className="shrink-0">Paso 1 de 2</Eyebrow>
-            <Progress step={1} total={2} className="my-0 flex-1 short:mb-0" />
+            {/* Desde la demo, comparar es el último paso del onboarding y sigue su numeración. */}
+            <Eyebrow className="shrink-0">{trial ? 'Paso 4 de 4' : 'Paso 1 de 2'}</Eyebrow>
+            <Progress
+              step={trial ? 4 : 1}
+              total={trial ? 4 : 2}
+              className="my-0 flex-1 short:mb-0"
+            />
           </div>
           <h1 className="mt-3 mb-2 text-[clamp(30px,8vw,34px)] lg:text-[42px]">
             ¿Qué alternativas quieres comparar?
           </h1>
-          <p className="leading-normal text-muted">Usa montos reales o edita el ejemplo.</p>
+          <p className="leading-normal text-muted">
+            {fromExample
+              ? 'Usa montos reales o edita el ejemplo.'
+              : 'Escribe el producto y el precio que viste en cada tienda.'}
+          </p>
         </section>
 
-        <div>
+        <form noValidate onSubmit={compare}>
           <section className="rounded-card border border-line bg-paper px-4 pt-3.5 pb-4">
             <TextField
               label="Nombre del producto"
               value={draft.product}
               onChange={(e) => setProduct(e.target.value)}
+              onBlur={() => touch('product')}
               placeholder="Ej. Auriculares inalámbricos"
-              error={productError}
+              error={shown('product', productError)}
             />
           </section>
 
@@ -63,14 +98,16 @@ export function ComparisonForm() {
                 label="Alternativa A"
                 value={draft.a.price}
                 onChange={(v) => setAltField('a', 'price', v)}
-                error={errorsA.price}
+                onBlur={() => touch('a')}
+                error={shown('a', errorsA.price)}
                 surface="paper"
               />
               <NumberField
                 label="Alternativa B"
                 value={draft.b.price}
                 onChange={(v) => setAltField('b', 'price', v)}
-                error={errorsB.price}
+                onBlur={() => touch('b')}
+                error={shown('b', errorsB.price)}
                 surface="paper"
               />
             </div>
@@ -99,11 +136,9 @@ export function ComparisonForm() {
           </section>
 
           <div className="mt-4 grid gap-2.5">
-            <Button disabled={!canCompare} onClick={() => router.push('/resultado')}>
-              Comparar costos reales
-            </Button>
+            <Button type="submit">Comparar costos reales</Button>
           </div>
-        </div>
+        </form>
       </div>
 
       <ConfirmDialog preset="discard" {...discardDialog} />

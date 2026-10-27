@@ -2,8 +2,11 @@ import { cn } from '@/lib/cn'
 
 type ProgressProps = { step: number; total?: number; className?: string }
 
-/** Barra de progreso por pasos (por defecto, los 3 del onboarding). */
-export function Progress({ step, total = 3, className }: ProgressProps) {
+/**
+ * Barra de progreso por pasos. Por defecto, los 4 del recorrido inicial:
+ * objetivo, dificultades, plan y comparar (el último lo muestra el comparador).
+ */
+export function Progress({ step, total = 4, className }: ProgressProps) {
   return (
     <div
       role="progressbar"

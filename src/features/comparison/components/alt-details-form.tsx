@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { NumberField } from '@/components/ui/number-field'
@@ -32,6 +32,7 @@ export function AltDetailsForm({ altKey }: { altKey: AltKey }) {
   const setAlt = useAppStore((s) => s.setAlt)
   const [alt, setLocalAlt] = useState(original)
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const errors = useAltValidation(alt)
   const cost = calculateCost(alt)
   const changed = alt !== original
@@ -39,6 +40,20 @@ export function AltDetailsForm({ altKey }: { altKey: AltKey }) {
 
   const leave = () => router.push('/comparar')
   const cancel = () => (changed ? setConfirmOpen(true) : leave())
+  // Los errores aparecen desde el primer cambio o al intentar guardar, no al abrir la pantalla.
+  const showErrors = changed || submitted
+
+  const saveChanges = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (cost !== null) {
+      setAlt(altKey, alt)
+      leave()
+      return
+    }
+    setSubmitted(true)
+    const form = event.currentTarget
+    requestAnimationFrame(() => form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
+  }
 
   return (
     <Screen>
@@ -52,33 +67,27 @@ export function AltDetailsForm({ altKey }: { altKey: AltKey }) {
         <small className="text-xs text-muted">El cashback posterior no reduce este importe.</small>
       </section>
 
-      <section className="grid gap-[17px] pt-[22px] md:grid-cols-2 md:gap-x-4">
-        {FIELDS.map(({ field, label }) => (
-          <NumberField
-            key={field}
-            label={label}
-            value={alt[field]}
-            onChange={(value) => setLocalAlt((current) => ({ ...current, [field]: value }))}
-            error={errors[field]}
-            surface="paper"
-          />
-        ))}
-      </section>
+      <form noValidate onSubmit={saveChanges}>
+        <section className="grid gap-[17px] pt-[22px] md:grid-cols-2 md:gap-x-4">
+          {FIELDS.map(({ field, label }) => (
+            <NumberField
+              key={field}
+              label={label}
+              value={alt[field]}
+              onChange={(value) => setLocalAlt((current) => ({ ...current, [field]: value }))}
+              error={showErrors ? errors[field] : undefined}
+              surface="paper"
+            />
+          ))}
+        </section>
 
-      <div className="mt-[25px] grid grid-cols-[1fr_1.2fr] gap-2.5">
-        <Button variant="secondary" onClick={cancel}>
-          Cancelar
-        </Button>
-        <Button
-          disabled={cost === null}
-          onClick={() => {
-            setAlt(altKey, alt)
-            leave()
-          }}
-        >
-          Guardar cambios
-        </Button>
-      </div>
+        <div className="mt-[25px] grid grid-cols-[1fr_1.2fr] gap-2.5">
+          <Button variant="secondary" onClick={cancel}>
+            Cancelar
+          </Button>
+          <Button type="submit">Guardar cambios</Button>
+        </div>
+      </form>
 
       <ConfirmDialog
         preset="discard"

@@ -14,10 +14,12 @@ export const getStorageStatus = safeStorage.getStatus
 export type ToastTone = 'success' | 'info'
 
 type AppState = PersistedState & {
-  /** Comparación en edición o en pantalla de resultado. No se persiste. */
+  /** Comparación en edición o en pantalla de resultado. Se guarda solo en la pestaña (draft-session). */
   draft: Comparison
   /** Hay cambios en el borrador que no se guardaron en el historial. */
   dirty: boolean
+  /** El borrador viene de la demo del onboarding: el comparador continúa su barra de progreso. */
+  trial: boolean
   toast: { message: string; tone: ToastTone } | null
   storageStatus: StorageStatus
 }
@@ -29,6 +31,8 @@ type AppActions = {
   loadExample: () => void
   /** Carga una comparación ya armada (p. ej. el ejemplo de una lección) como borrador limpio. */
   loadDraft: (comparison: Comparison) => void
+  /** Como `loadDraft`, pero como último paso del onboarding (hasta guardar o empezar otra). */
+  startTrial: (comparison: Comparison) => void
   openSaved: (id: string) => void
   setProduct: (product: string) => void
   setAltField: (key: AltKey, field: AltField, value: number) => void
@@ -54,6 +58,7 @@ export const useAppStore = create<AppStore>()(
       saved: [],
       draft: initialComparison(),
       dirty: false,
+      trial: false,
       toast: null,
       storageStatus: 'ok',
 
@@ -65,12 +70,13 @@ export const useAppStore = create<AppStore>()(
             : [...difficulties, difficulty],
         })),
 
-      startNew: () => set({ draft: initialComparison(), dirty: false }),
-      loadExample: () => set({ draft: exampleComparison(), dirty: false }),
-      loadDraft: (comparison) => set({ draft: comparison, dirty: false }),
+      startNew: () => set({ draft: initialComparison(), dirty: false, trial: false }),
+      loadExample: () => set({ draft: exampleComparison(), dirty: false, trial: false }),
+      loadDraft: (comparison) => set({ draft: comparison, dirty: false, trial: false }),
+      startTrial: (comparison) => set({ draft: comparison, dirty: false, trial: true }),
       openSaved: (id) => {
         const item = get().saved.find((c) => c.id === id)
-        if (item) set({ draft: item, dirty: false })
+        if (item) set({ draft: item, dirty: false, trial: false })
       },
       setProduct: (product) => set(({ draft }) => ({ draft: { ...draft, product }, dirty: true })),
       setAltField: (key, field, value) =>
@@ -87,6 +93,7 @@ export const useAppStore = create<AppStore>()(
           draft: next,
           saved: [next, ...saved.filter((c) => c.id !== next.id)],
           dirty: false,
+          trial: false,
         }))
         get().flash('Comparación guardada')
       },
@@ -94,7 +101,14 @@ export const useAppStore = create<AppStore>()(
         set(({ saved, draft }) => ({ saved: saved.filter((c) => c.id !== draft.id) })),
       clearHistory: () => set({ saved: [] }),
       resetAll: () =>
-        set({ goal: '', difficulties: [], saved: [], draft: initialComparison(), dirty: false }),
+        set({
+          goal: '',
+          difficulties: [],
+          saved: [],
+          draft: initialComparison(),
+          dirty: false,
+          trial: false,
+        }),
 
       flash: (message, tone = 'success') => {
         clearTimeout(toastTimer)

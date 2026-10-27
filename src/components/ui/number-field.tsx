@@ -7,6 +7,7 @@ type NumberFieldProps = {
   label: string
   value: number
   onChange: (value: number) => void
+  onBlur?: () => void
   error?: string
   prefix?: string
   /** Fondo del input: crema (dentro de tarjetas blancas) o blanco (sobre fondo crema). */
@@ -18,6 +19,7 @@ export function NumberField({
   label,
   value,
   onChange,
+  onBlur,
   error,
   prefix = 'S/',
   surface = 'cream',
@@ -41,13 +43,14 @@ export function NumberField({
           step="0.01"
           value={Number.isNaN(value) ? '' : value}
           onChange={(e) => onChange(e.target.value === '' ? NaN : Number(e.target.value))}
+          onBlur={onBlur}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           className="w-full min-w-0 border-0 bg-transparent pl-1.5 text-xl font-bold outline-hidden"
         />
       </div>
       {error && (
-        <small id={errorId} className="text-[10px] leading-tight text-danger">
+        <small id={errorId} className="text-xs leading-snug text-danger">
           {error}
         </small>
       )}
