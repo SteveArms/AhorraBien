@@ -15,7 +15,7 @@ export function HistoryItem({ comparison, index, onOpen }: HistoryItemProps) {
     <button
       type="button"
       onClick={onOpen}
-      className="grid w-full grid-cols-[28px_1fr_auto] items-start gap-2.5 border-0 border-b border-line bg-transparent py-5 text-left"
+      className="grid w-full grid-cols-[28px_1fr_auto] items-start gap-2.5 border-0 border-b border-line bg-transparent py-5 text-left transition-colors duration-150 lg:rounded-card lg:border lg:bg-paper lg:p-5 lg:hover:border-forest"
     >
       <span className="font-serif text-accent italic">{String(index + 1).padStart(2, '0')}</span>
       <div className="grid min-w-0 gap-[5px]">

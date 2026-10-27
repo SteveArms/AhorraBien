@@ -17,9 +17,9 @@ export function HistoryScreen() {
   const openSaved = useOpenSaved()
 
   return (
-    <Screen>
+    <Screen className="lg:max-w-[1040px] lg:pt-4">
       <ScreenHeader title="Tus comparaciones" />
-      <section className="pt-[38px] pb-[25px]">
+      <section className="pt-[38px] pb-[25px] lg:pt-6">
         <Eyebrow>Decisiones guardadas</Eyebrow>
         <h1 className="mt-2.5">
           Tu historial,
@@ -28,7 +28,7 @@ export function HistoryScreen() {
         </h1>
       </section>
       {saved.length ? (
-        <section className="border-t border-line">
+        <section className="border-t border-line lg:grid lg:grid-cols-2 lg:gap-3 lg:border-t-0">
           {saved.map((item, index) => (
             <HistoryItem
               key={item.id}
@@ -41,11 +41,12 @@ export function HistoryScreen() {
       ) : (
         <EmptyState
           decorated
-          className="pt-[85px]"
+          className="mt-2 rounded-card border border-dashed border-line px-6 py-14 lg:py-20"
           title="Aún no hay comparaciones"
           description="Las que guardes aparecerán aquí para que puedas volver a revisarlas."
           action={
             <Button
+              className="mt-3"
               onClick={() => {
                 startNew()
                 router.push('/comparar')
