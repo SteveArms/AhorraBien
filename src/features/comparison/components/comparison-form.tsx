@@ -60,15 +60,13 @@ export function ComparisonForm() {
 
       <div className="lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14 lg:pt-4">
         <section className="pt-3 pb-5 lg:p-0">
-          <div className="flex items-center gap-3">
-            {/* Desde la demo, comparar es el último paso del onboarding y sigue su numeración. */}
-            <Eyebrow className="shrink-0">{trial ? 'Paso 4 de 4' : 'Paso 1 de 2'}</Eyebrow>
-            <Progress
-              step={trial ? 4 : 1}
-              total={trial ? 4 : 2}
-              className="my-0 flex-1 short:mb-0"
-            />
-          </div>
+          {/* Desde la demo, comparar es el último paso del onboarding y sigue su numeración. */}
+          <Progress
+            step={trial ? 4 : 1}
+            total={trial ? 4 : 2}
+            label={trial ? 'Compara' : undefined}
+            className="my-0 short:mb-0"
+          />
           <h1 className="mt-3 mb-2 text-[clamp(30px,8vw,34px)] lg:text-[42px]">
             ¿Qué alternativas quieres comparar?
           </h1>

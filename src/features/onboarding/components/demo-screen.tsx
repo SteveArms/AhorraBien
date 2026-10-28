@@ -52,7 +52,7 @@ export function DemoScreen() {
         title={lesson ? 'Tu plan' : 'Cómo funciona'}
         backHref={goal ? '/onboarding/dificultades' : '/'}
       />
-      <Progress step={3} />
+      <Progress step={3} label={lesson ? 'Tu plan' : 'Cómo funciona'} />
 
       {lesson ? (
         <section>
@@ -82,7 +82,7 @@ export function DemoScreen() {
 
       {lesson ? (
         <section className="mt-8">
-          <Eyebrow>Pruébalo con un ejemplo</Eyebrow>
+          <Eyebrow>Último paso: compara este ejemplo</Eyebrow>
           <h2 className="mt-2 text-[22px] font-bold tracking-[-.03em]">{lesson.example.product}</h2>
           <p className="mt-1.5 mb-4 text-sm leading-normal text-muted">{lesson.example.context}</p>
           <div className="grid grid-cols-[1fr_30px_1fr] items-center border-y border-line py-[22px]">
@@ -121,7 +121,7 @@ export function DemoScreen() {
 
       <StickyActions>
         <Button onClick={tryIt}>
-          {lesson ? 'Probar este ejemplo' : 'Probar comparación'} <Icon name="arrow" />
+          {lesson ? 'Comparar este ejemplo' : 'Probar comparación'} <Icon name="arrow" />
         </Button>
         {lesson ? (
           <ButtonLink href="/onboarding/dificultades" variant="text">

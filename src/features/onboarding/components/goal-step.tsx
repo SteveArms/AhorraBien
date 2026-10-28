@@ -36,7 +36,7 @@ export function GoalStep() {
   return (
     <Screen>
       <ScreenHeader title="Tu punto de partida" backHref={fromProfile ? '/perfil' : '/'} />
-      <Progress step={1} />
+      <Progress step={1} label="Objetivo" />
       <section>
         <Eyebrow>Una sola elección</Eyebrow>
         <h1 id={titleId} className="mt-2.5 mb-8">

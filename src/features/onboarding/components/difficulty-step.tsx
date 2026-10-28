@@ -22,7 +22,7 @@ export function DifficultyStep() {
         title="Tu punto de partida"
         backHref={fromProfile ? '/perfil' : '/onboarding/objetivo'}
       />
-      <Progress step={2} />
+      <Progress step={2} label="Dificultades" />
       <section>
         <Eyebrow>Puedes elegir varias</Eyebrow>
         <h1 className="mt-2.5 mb-8">¿Qué suele hacer más difícil elegir?</h1>
